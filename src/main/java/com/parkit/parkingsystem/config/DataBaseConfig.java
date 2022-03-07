@@ -15,7 +15,7 @@ public class DataBaseConfig {
         return DriverManager.getConnection(
                 "jdbc:mysql://localhost:3306/prod?zeroDateTimeBehavior=CONVERT_TO_NULL&serverTimezone=UTC","root","rootroot");
     }
-
+LMKHAJSFMOIHAZEQOIJZE%PIJZ%EPFJZEFPJ
     public void closeConnection(Connection con){
         if(con!=null){
             try {
