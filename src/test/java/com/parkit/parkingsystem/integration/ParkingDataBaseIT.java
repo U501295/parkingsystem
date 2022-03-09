@@ -29,6 +29,7 @@ public class ParkingDataBaseIT {
     @Mock
     private static InputReaderUtil inputReaderUtil;
 
+
     @BeforeAll
     private static void setUp() throws Exception{
         parkingSpotDAO = new ParkingSpotDAO();
@@ -66,6 +67,17 @@ public class ParkingDataBaseIT {
         parkingService.processExitingVehicle();
         assertThat(ticketDAO.getTicket("ABCDEF").getOutTime()).isNotNull();
         assertThat(ticketDAO.getTicket("ABCDEF").getPrice()).isNotZero();
+
+    }
+
+    @Test
+    public void testParkingACarWithRecurringCustomer(){
+        ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+        parkingService.processIncomingVehicle();
+        parkingService.processExitingVehicle();
+        parkingService.processIncomingVehicle();
+        assertThat(ticketDAO.isTicketFromRecurrentUser("ABCDEF")).isTrue();
+
 
     }
 

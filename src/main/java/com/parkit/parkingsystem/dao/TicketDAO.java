@@ -89,12 +89,16 @@ public class TicketDAO {
     public boolean isTicketFromRecurrentUser(String vehicleRegNumber){
         Connection con = null;
         boolean recurring=false;
+        int count=0;
         try {
             con = dataBaseConfig.getConnection();
             PreparedStatement ps = con.prepareStatement(DBConstants.IS_RECURRING);
             ps.setString(1,vehicleRegNumber);
             ResultSet rs = ps.executeQuery();
-            int count = rs.getInt(1);
+            if(rs.next()){
+                count = rs.getInt(1);
+            }
+
             if (count > 0)
             {
                 recurring=true;
