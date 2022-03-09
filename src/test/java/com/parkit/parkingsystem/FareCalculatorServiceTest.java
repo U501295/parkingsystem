@@ -167,4 +167,38 @@ public class FareCalculatorServiceTest {
         assertEquals( (24 * Fare.CAR_RATE_PER_HOUR) , ticket.getPrice());
     }
 
+    @Test
+    public void calculateFareCarWithRecurringCustomer(){
+        Date inTime = new Date();
+        inTime.setTime( System.currentTimeMillis() - (  24 * 60 * 60 * 1000) );//24 hours parking time should give 24 * parking fare per hour
+        Date outTime = new Date();
+        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR,false);
+        boolean isRecurring = true;
+
+        ticket.setInTime(inTime);
+        ticket.setOutTime(outTime);
+        ticket.setParkingSpot(parkingSpot);
+        ticket.setIsRecurring(isRecurring);
+        fareCalculatorService.calculateFare(ticket);
+        double expectedResult = (24 * Fare.CAR_RATE_PER_HOUR) - (0.05*(24 * Fare.CAR_RATE_PER_HOUR));
+        assertEquals( expectedResult , ticket.getPrice());
+    }
+
+    @Test
+    public void calculateFareBikeWithMoreThanADayParkingTime(){
+        Date inTime = new Date();
+        inTime.setTime( System.currentTimeMillis() - (  24 * 60 * 60 * 1000) );//24 hours parking time should give 24 * parking fare per hour
+        Date outTime = new Date();
+        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.BIKE,false);
+        boolean isRecurring = true;
+
+        ticket.setInTime(inTime);
+        ticket.setOutTime(outTime);
+        ticket.setParkingSpot(parkingSpot);
+        ticket.setIsRecurring(isRecurring);
+        fareCalculatorService.calculateFare(ticket);
+        double expectedResult = (24 * Fare.BIKE_RATE_PER_HOUR) - (0.05*(24 * Fare.BIKE_RATE_PER_HOUR));
+        assertEquals( expectedResult , ticket.getPrice());
+    }
+
 }
