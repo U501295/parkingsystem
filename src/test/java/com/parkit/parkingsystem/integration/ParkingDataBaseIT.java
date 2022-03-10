@@ -81,4 +81,16 @@ public class ParkingDataBaseIT {
 
     }
 
+    @Test
+    public void testParkingExitACarWithRecurringCustomer(){
+        ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+        parkingService.processIncomingVehicle();
+        parkingService.processExitingVehicle();
+        parkingService.processIncomingVehicle();
+        parkingService.processExitingVehicle();
+        assertThat(ticketDAO.getTicket("ABCDEF").getOutTime()).isNotNull();
+
+
+    }
+
 }
