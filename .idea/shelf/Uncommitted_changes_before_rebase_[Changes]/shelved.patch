@@ -1,0 +1,13 @@
+Index: resources/testmin.sql
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/resources/testmin.sql b/resources/testmin.sql
+new file mode 100644
+--- /dev/null	(date 1646834632541)
++++ b/resources/testmin.sql	(date 1646834632541)
+@@ -0,0 +1,2 @@
++use prod;
++select min(PARKING_NUMBER) from parking where AVAILABLE = true and TYPE = CAR;
+\ No newline at end of file

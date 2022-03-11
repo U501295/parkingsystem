@@ -1,0 +1,56 @@
+Index: src/main/java/com/parkit/parkingsystem/dao/TicketDAO.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.parkit.parkingsystem.dao;\r\n\r\nimport com.parkit.parkingsystem.config.DataBaseConfig;\r\nimport com.parkit.parkingsystem.constants.DBConstants;\r\nimport com.parkit.parkingsystem.constants.ParkingType;\r\nimport com.parkit.parkingsystem.model.ParkingSpot;\r\nimport com.parkit.parkingsystem.model.Ticket;\r\nimport org.apache.logging.log4j.LogManager;\r\nimport org.apache.logging.log4j.Logger;\r\n\r\nimport java.sql.Connection;\r\nimport java.sql.PreparedStatement;\r\nimport java.sql.ResultSet;\r\nimport java.sql.Timestamp;\r\n\r\npublic class TicketDAO {\r\n\r\n    private static final Logger logger = LogManager.getLogger(\"TicketDAO\");\r\n\r\n    public DataBaseConfig dataBaseConfig = new DataBaseConfig();\r\n\r\n    public boolean saveTicket(Ticket ticket){\r\n        Connection con = null;\r\n        try {\r\n            con = dataBaseConfig.getConnection();\r\n            PreparedStatement ps = con.prepareStatement(DBConstants.SAVE_TICKET);\r\n            //(ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)\r\n            ps.setInt(1,ticket.getParkingSpot().getId());\r\n            ps.setString(2, ticket.getVehicleRegNumber());\r\n            ps.setDouble(3, ticket.getPrice());\r\n            ps.setTimestamp(4, new Timestamp(ticket.getInTime().getTime()));\r\n            ps.setTimestamp(5, (ticket.getOutTime() == null)?null: (new Timestamp(ticket.getOutTime().getTime())) );\r\n            return ps.execute();\r\n        }catch (Exception ex){\r\n            logger.error(\"Error fetching next available slot\",ex);\r\n        }finally {\r\n            dataBaseConfig.closeConnection(con);\r\n            return false;\r\n        }\r\n    }\r\n\r\n    public Ticket getTicket(String vehicleRegNumber) {\r\n        Connection con = null;\r\n        Ticket ticket = null;\r\n        try {\r\n            con = dataBaseConfig.getConnection();\r\n            PreparedStatement ps = con.prepareStatement(DBConstants.GET_TICKET);\r\n            //ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)\r\n            ps.setString(1,vehicleRegNumber);\r\n            ResultSet rs = ps.executeQuery();\r\n            if(rs.next()){\r\n                ticket = new Ticket();\r\n                ParkingSpot parkingSpot = new ParkingSpot(rs.getInt(1), ParkingType.valueOf(rs.getString(6)),false);\r\n                ticket.setParkingSpot(parkingSpot);\r\n                ticket.setId(rs.getInt(2));\r\n                ticket.setVehicleRegNumber(vehicleRegNumber);\r\n                ticket.setPrice(rs.getDouble(3));\r\n                ticket.setInTime(rs.getTimestamp(4));\r\n                ticket.setOutTime(rs.getTimestamp(5));\r\n            }\r\n            dataBaseConfig.closeResultSet(rs);\r\n            dataBaseConfig.closePreparedStatement(ps);\r\n        }catch (Exception ex){\r\n            logger.error(\"Error fetching next available slot\",ex);\r\n        }finally {\r\n            dataBaseConfig.closeConnection(con);\r\n            return ticket;\r\n        }\r\n    }\r\n\r\n    public boolean updateTicket(Ticket ticket) {\r\n        Connection con = null;\r\n        try {\r\n            con = dataBaseConfig.getConnection();\r\n            PreparedStatement ps = con.prepareStatement(DBConstants.UPDATE_TICKET);\r\n            ps.setDouble(1, ticket.getPrice());\r\n            ps.setTimestamp(2, new Timestamp(ticket.getOutTime().getTime()));\r\n            ps.setInt(3,ticket.getId());\r\n            ps.execute();\r\n            return true;\r\n        }catch (Exception ex){\r\n            logger.error(\"Error saving ticket info\",ex);\r\n        }finally {\r\n            dataBaseConfig.closeConnection(con);\r\n        }\r\n        return false;\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/parkit/parkingsystem/dao/TicketDAO.java b/src/main/java/com/parkit/parkingsystem/dao/TicketDAO.java
+--- a/src/main/java/com/parkit/parkingsystem/dao/TicketDAO.java	(revision ff07f1cfd18cdf10bcad031b39d6bc4680111ea6)
++++ b/src/main/java/com/parkit/parkingsystem/dao/TicketDAO.java	(date 1646652952876)
+@@ -43,7 +43,7 @@
+         Connection con = null;
+         Ticket ticket = null;
+         try {
+-            con = dataBaseConfig.getConnection();
++            con = dataBaseConfig.getConnectionTest();
+             PreparedStatement ps = con.prepareStatement(DBConstants.GET_TICKET);
+             //ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
+             ps.setString(1,vehicleRegNumber);
+@@ -71,7 +71,7 @@
+     public boolean updateTicket(Ticket ticket) {
+         Connection con = null;
+         try {
+-            con = dataBaseConfig.getConnection();
++            con = dataBaseConfig.getConnectionTest();
+             PreparedStatement ps = con.prepareStatement(DBConstants.UPDATE_TICKET);
+             ps.setDouble(1, ticket.getPrice());
+             ps.setTimestamp(2, new Timestamp(ticket.getOutTime().getTime()));
+Index: src/main/java/com/parkit/parkingsystem/dao/ParkingSpotDAO.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.parkit.parkingsystem.dao;\r\n\r\nimport com.parkit.parkingsystem.config.DataBaseConfig;\r\nimport com.parkit.parkingsystem.constants.DBConstants;\r\nimport com.parkit.parkingsystem.constants.ParkingType;\r\nimport com.parkit.parkingsystem.model.ParkingSpot;\r\nimport org.apache.logging.log4j.LogManager;\r\nimport org.apache.logging.log4j.Logger;\r\n\r\nimport java.sql.Connection;\r\nimport java.sql.PreparedStatement;\r\nimport java.sql.ResultSet;\r\n\r\npublic class ParkingSpotDAO {\r\n    private static final Logger logger = LogManager.getLogger(\"ParkingSpotDAO\");\r\n\r\n    public DataBaseConfig dataBaseConfig = new DataBaseConfig();\r\n\r\n    public int getNextAvailableSlot(ParkingType parkingType){\r\n        Connection con = null;\r\n        int result=-1;\r\n        try {\r\n            con = dataBaseConfig.getConnection();\r\n            PreparedStatement ps = con.prepareStatement(DBConstants.GET_NEXT_PARKING_SPOT);\r\n            ps.setString(1, parkingType.toString());\r\n            ResultSet rs = ps.executeQuery();\r\n            if(rs.next()){\r\n                result = rs.getInt(1);;\r\n            }\r\n            dataBaseConfig.closeResultSet(rs);\r\n            dataBaseConfig.closePreparedStatement(ps);\r\n        }catch (Exception ex){\r\n            logger.error(\"Error fetching next available slot\",ex);\r\n        }finally {\r\n            dataBaseConfig.closeConnection(con);\r\n        }\r\n        return result;\r\n    }\r\n\r\n    public boolean updateParking(ParkingSpot parkingSpot){\r\n        //update the availability fo that parking slot\r\n        Connection con = null;\r\n        try {\r\n            con = dataBaseConfig.getConnection();\r\n            PreparedStatement ps = con.prepareStatement(DBConstants.UPDATE_PARKING_SPOT);\r\n            ps.setBoolean(1, parkingSpot.isAvailable());\r\n            ps.setInt(2, parkingSpot.getId());\r\n            int updateRowCount = ps.executeUpdate();\r\n            dataBaseConfig.closePreparedStatement(ps);\r\n            return (updateRowCount == 1);\r\n        }catch (Exception ex){\r\n            logger.error(\"Error updating parking info\",ex);\r\n            return false;\r\n        }finally {\r\n            dataBaseConfig.closeConnection(con);\r\n        }\r\n    }\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/parkit/parkingsystem/dao/ParkingSpotDAO.java b/src/main/java/com/parkit/parkingsystem/dao/ParkingSpotDAO.java
+--- a/src/main/java/com/parkit/parkingsystem/dao/ParkingSpotDAO.java	(revision ff07f1cfd18cdf10bcad031b39d6bc4680111ea6)
++++ b/src/main/java/com/parkit/parkingsystem/dao/ParkingSpotDAO.java	(date 1646652546119)
+@@ -20,7 +20,7 @@
+         Connection con = null;
+         int result=-1;
+         try {
+-            con = dataBaseConfig.getConnection();
++            con = dataBaseConfig.getConnectionTest();
+             PreparedStatement ps = con.prepareStatement(DBConstants.GET_NEXT_PARKING_SPOT);
+             ps.setString(1, parkingType.toString());
+             ResultSet rs = ps.executeQuery();
+@@ -41,7 +41,7 @@
+         //update the availability fo that parking slot
+         Connection con = null;
+         try {
+-            con = dataBaseConfig.getConnection();
++            con = dataBaseConfig.getConnectionTest();
+             PreparedStatement ps = con.prepareStatement(DBConstants.UPDATE_PARKING_SPOT);
+             ps.setBoolean(1, parkingSpot.isAvailable());
+             ps.setInt(2, parkingSpot.getId());
