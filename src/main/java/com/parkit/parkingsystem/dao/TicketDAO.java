@@ -90,7 +90,7 @@ public class TicketDAO {
         }
         return false;
     }
-
+    //TODO : show new feature of reduction
     public boolean isTicketFromRecurrentUser(String vehicleRegNumber){
         Connection con = null;
         boolean recurring=false;

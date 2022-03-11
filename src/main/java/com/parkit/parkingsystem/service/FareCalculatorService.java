@@ -18,7 +18,7 @@ public class FareCalculatorService {
         double duration;
         final int sec_in_millisec = 1000, min_in_sec=60,hours_in_min=60;
         duration = (outHour - inHour)/(sec_in_millisec*min_in_sec*hours_in_min);
-
+        //TODO : show new feature
         if  (duration<0.5){
             ticket.setPrice(0);
 

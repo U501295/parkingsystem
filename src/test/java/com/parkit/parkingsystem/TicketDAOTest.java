@@ -2,8 +2,11 @@ package com.parkit.parkingsystem;
 
 import com.parkit.parkingsystem.constants.ParkingType;
 import com.parkit.parkingsystem.dao.TicketDAO;
+import com.parkit.parkingsystem.integration.config.DataBaseTestConfig;
+import com.parkit.parkingsystem.integration.service.DataBasePrepareService;
 import com.parkit.parkingsystem.model.ParkingSpot;
 import com.parkit.parkingsystem.model.Ticket;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,12 +22,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @ExtendWith(MockitoExtension.class)
 public class TicketDAOTest {
 
+    private static DataBaseTestConfig dataBaseTestConfig = new DataBaseTestConfig();
     private TicketDAO ticketDAO;
     private Ticket ticket;
-    private ParkingSpot parkingSpot;
 
 
-    public boolean equal(Ticket obj)
+   /* public boolean equal(Ticket obj)
     {
         return  (obj instanceof Ticket)
                 &&
@@ -39,14 +42,15 @@ public class TicketDAOTest {
                 (obj).getOutTime().toInstant().truncatedTo(ChronoUnit.SECONDS).equals(ticket.getOutTime().toInstant().truncatedTo(ChronoUnit.SECONDS));
 
 
-    }
+    }*/
 
     @BeforeEach
     private void setUpPerTest() {
         try {
-            parkingSpot = new ParkingSpot(1, ParkingType.CAR,false);
+            ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);
             ticket = new Ticket();
             ticketDAO = new TicketDAO();
+            ticketDAO.dataBaseConfig = dataBaseTestConfig;
             ticket.setParkingSpot(parkingSpot);
             ticket.setVehicleRegNumber("TEST");
             ticket.setPrice(2.0);
