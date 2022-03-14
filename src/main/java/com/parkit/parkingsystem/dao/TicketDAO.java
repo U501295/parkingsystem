@@ -8,10 +8,7 @@ import com.parkit.parkingsystem.model.Ticket;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Timestamp;
+import java.sql.*;
 
 public class TicketDAO {
 
@@ -19,13 +16,14 @@ public class TicketDAO {
 
     public DataBaseConfig dataBaseConfig = new DataBaseConfig();
 
-    public boolean saveTicket(Ticket ticket){
+    public boolean saveTicket(Ticket ticket) throws SQLException, ClassNotFoundException {
         Connection con = null;
         boolean result = false;
+        con = dataBaseConfig.getConnection();
+        PreparedStatement ps = con.prepareStatement(DBConstants.SAVE_TICKET);
 
         try {
-            con = dataBaseConfig.getConnection();
-            PreparedStatement ps = con.prepareStatement(DBConstants.SAVE_TICKET);
+
             //(ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
             ps.setInt(1,ticket.getParkingSpot().getId());
             ps.setString(2, ticket.getVehicleRegNumber());
@@ -37,22 +35,21 @@ public class TicketDAO {
         }catch (Exception ex){
             logger.error("Error fetching next available slot",ex);
         }finally {
-
+            dataBaseConfig.closePreparedStatement(ps);
             dataBaseConfig.closeConnection(con);
 
         }
         return result;
     }
 
-    public Ticket getTicket(String vehicleRegNumber) {
+    public Ticket getTicket(String vehicleRegNumber) throws SQLException, ClassNotFoundException {
         Connection con = null;
         Ticket ticket = null;
+        con = dataBaseConfig.getConnection();
+        PreparedStatement ps = con.prepareStatement(DBConstants.GET_TICKET);
+        ps.setString(1,vehicleRegNumber);
+        ResultSet rs = ps.executeQuery();
         try {
-            con = dataBaseConfig.getConnection();
-            PreparedStatement ps = con.prepareStatement(DBConstants.GET_TICKET);
-            //ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
-            ps.setString(1,vehicleRegNumber);
-            ResultSet rs = ps.executeQuery();
             if(rs.next()){
                 ticket = new Ticket();
                 ParkingSpot parkingSpot = new ParkingSpot(rs.getInt(1), ParkingType.valueOf(rs.getString(6)),false);
@@ -63,21 +60,22 @@ public class TicketDAO {
                 ticket.setInTime(rs.getTimestamp(4));
                 ticket.setOutTime(rs.getTimestamp(5));
             }
-            dataBaseConfig.closeResultSet(rs);
-            dataBaseConfig.closePreparedStatement(ps);
+
         }catch (Exception ex){
             logger.error("Error fetching next available slot",ex);
         }finally {
+            dataBaseConfig.closeResultSet(rs);
+            dataBaseConfig.closePreparedStatement(ps);
             dataBaseConfig.closeConnection(con);
-            return ticket;
         }
+        return ticket;
     }
 
-    public boolean updateTicket(Ticket ticket) {
+    public boolean updateTicket(Ticket ticket) throws SQLException, ClassNotFoundException {
         Connection con = null;
+        con = dataBaseConfig.getConnection();
+        PreparedStatement ps = con.prepareStatement(DBConstants.UPDATE_TICKET);
         try {
-            con = dataBaseConfig.getConnection();
-            PreparedStatement ps = con.prepareStatement(DBConstants.UPDATE_TICKET);
             ps.setDouble(1, ticket.getPrice());
             ps.setTimestamp(2, new Timestamp(ticket.getOutTime().getTime()));
             ps.setInt(3,ticket.getId());
@@ -86,36 +84,37 @@ public class TicketDAO {
         }catch (Exception ex){
             logger.error("Error saving ticket info",ex);
         }finally {
+            dataBaseConfig.closePreparedStatement(ps);
             dataBaseConfig.closeConnection(con);
         }
         return false;
     }
     //TODO : show new feature of reduction
-    public boolean isTicketFromRecurrentUser(String vehicleRegNumber){
+    public boolean isTicketFromRecurrentUser(String vehicleRegNumber) throws SQLException, ClassNotFoundException {
         Connection con = null;
         boolean recurring=false;
         int count=0;
+        con = dataBaseConfig.getConnection();
+        PreparedStatement ps = con.prepareStatement(DBConstants.IS_RECURRING);
+        ps.setString(1,vehicleRegNumber);
+        ResultSet rs = ps.executeQuery();
         try {
-            con = dataBaseConfig.getConnection();
-            PreparedStatement ps = con.prepareStatement(DBConstants.IS_RECURRING);
-            ps.setString(1,vehicleRegNumber);
-            ResultSet rs = ps.executeQuery();
             if(rs.next()){
                 count = rs.getInt(1);
             }
-
-            if (count > 0)
-            {
+            if (count > 0){
                 recurring=true;
-            }else {
             }
-            dataBaseConfig.closeResultSet(rs);
-            dataBaseConfig.closePreparedStatement(ps);
+            else{
+
+            }
         }
 
         catch (Exception ex){
             logger.error("Error fetching data from the database",ex);
         }finally {
+            dataBaseConfig.closeResultSet(rs);
+            dataBaseConfig.closePreparedStatement(ps);
             dataBaseConfig.closeConnection(con);
             return recurring;
         }

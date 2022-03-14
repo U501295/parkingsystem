@@ -17,6 +17,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.sql.SQLException;
 import java.util.Date;
 
 import static com.parkit.parkingsystem.constants.ParkingType.BIKE;
@@ -70,7 +71,7 @@ public class ParkingServiceTest {
     }
 
     @Test
-    public void getNextParkingNumberIfAvailableTest(){
+    public void getNextParkingNumberIfAvailableTest() throws SQLException, ClassNotFoundException {
 
         when(inputReaderUtil.readSelection()).thenReturn(1);
         when(parkingSpotDAO.getNextAvailableSlot(any(ParkingType.class))).thenReturn(1);
@@ -80,7 +81,7 @@ public class ParkingServiceTest {
     }
 
     @Test
-    public void ErrorWhenParkingIsFull(){
+    public void ErrorWhenParkingIsFull() throws SQLException, ClassNotFoundException {
         when(inputReaderUtil.readSelection()).thenReturn(1);
         when(parkingSpotDAO.getNextAvailableSlot(any(ParkingType.class))).thenReturn(0);
         try {
@@ -119,7 +120,7 @@ public class ParkingServiceTest {
     }
 
     @Test
-    public void processIncomingVehicle(){
+    public void processIncomingVehicle() throws SQLException, ClassNotFoundException {
         when(inputReaderUtil.readSelection()).thenReturn(1);
         when(parkingSpotDAO.getNextAvailableSlot(any(ParkingType.class))).thenReturn(1);
         parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
@@ -129,7 +130,7 @@ public class ParkingServiceTest {
     }
 
     @Test
-    public void ErrorProcessIncomingVehicle(){
+    public void ErrorProcessIncomingVehicle() throws SQLException, ClassNotFoundException {
         when(inputReaderUtil.readSelection()).thenReturn(1);
         when(parkingSpotDAO.getNextAvailableSlot(any(ParkingType.class))).thenReturn(0);
         parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);

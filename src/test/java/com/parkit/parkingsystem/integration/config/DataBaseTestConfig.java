@@ -5,16 +5,20 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
+import java.util.Properties;
 
 public class DataBaseTestConfig extends DataBaseConfig {
 
     private static final Logger logger = LogManager.getLogger("DataBaseTestConfig");
 
     public Connection getConnection() throws ClassNotFoundException, SQLException {
+        Properties props = new Properties();
         logger.info("Create DB connection");
-        Class.forName("com.mysql.cj.jdbc.Driver");
+        Class.forName(props.getProperty("jdbc.driver.class"));
         return DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/test?zeroDateTimeBehavior=CONVERT_TO_NULL&serverTimezone=UTC","root","rootroot");
+                props.getProperty("jdbc.url"),
+                props.getProperty("jdbc.login"),
+                props.getProperty("jdbc.password"));
     }
 
     public void closeConnection(Connection con){

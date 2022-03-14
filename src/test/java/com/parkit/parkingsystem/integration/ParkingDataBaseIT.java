@@ -15,6 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.sql.SQLException;
 import java.util.Date;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -58,7 +59,7 @@ public class ParkingDataBaseIT {
     }
 
     @Test
-    public void testParkingACar(){
+    public void testParkingACar() throws SQLException, ClassNotFoundException {
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         parkingService.processIncomingVehicle();
         assertThat(ticketDAO.getTicket("ABCDEF")).isNotNull();
@@ -67,7 +68,7 @@ public class ParkingDataBaseIT {
     }
 
     @Test
-    public void testParkingLotExit(){
+    public void testParkingLotExit() throws SQLException, ClassNotFoundException {
         testParkingACar();
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         parkingService.processExitingVehicle();
@@ -77,7 +78,7 @@ public class ParkingDataBaseIT {
     }
 
     @Test
-    public void testParkingACarWithRecurringCustomer(){
+    public void testParkingACarWithRecurringCustomer() throws SQLException, ClassNotFoundException {
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         parkingService.processIncomingVehicle();
         parkingService.processExitingVehicle();
@@ -88,7 +89,7 @@ public class ParkingDataBaseIT {
     }
 
     @Test
-    public void testParkingExitACarWithRecurringCustomer(){
+    public void testParkingExitACarWithRecurringCustomer() throws SQLException, ClassNotFoundException {
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         parkingService.processIncomingVehicle();
         parkingService.processExitingVehicle();

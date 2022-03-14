@@ -56,7 +56,7 @@ public class TicketDaoIT {
     }
 
     @Test
-    public void saveTicketTrue(){
+    public void saveTicketTrue() throws SQLException, ClassNotFoundException {
         // il n'est pas possible de mocker la base de donnée étant donné qu'elle est créée directement dans saveTicket
         assertTrue(ticketDAO.saveTicket(ticket));
 
