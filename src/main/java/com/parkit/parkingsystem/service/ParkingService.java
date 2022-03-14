@@ -1,5 +1,6 @@
 package com.parkit.parkingsystem.service;
 
+import com.mysql.cj.exceptions.ExceptionFactory;
 import com.parkit.parkingsystem.constants.ParkingType;
 import com.parkit.parkingsystem.dao.ParkingSpotDAO;
 import com.parkit.parkingsystem.dao.TicketDAO;
@@ -65,7 +66,7 @@ public class ParkingService {
         return inputReaderUtil.readVehicleRegistrationNumber();
     }
 
-    public ParkingSpot getNextParkingNumberIfAvailable(){
+    public ParkingSpot getNextParkingNumberIfAvailable() throws IndexOutOfBoundsException{
         int parkingNumber=0;
         ParkingSpot parkingSpot = null;
         try{
@@ -74,7 +75,7 @@ public class ParkingService {
             if(parkingNumber > 0){
                 parkingSpot = new ParkingSpot(parkingNumber,parkingType, true);
             }else{
-                throw new Exception("Error fetching parking number from DB. Parking slots might be full");
+                throw new IndexOutOfBoundsException("Error fetching parking number from DB. Parking slots might be full");
             }
         }catch(IllegalArgumentException ie){
             logger.error("Error parsing user input for type of vehicle", ie);
@@ -84,7 +85,7 @@ public class ParkingService {
         return parkingSpot;
     }
 
-    public ParkingType getVehicleType(){
+    public ParkingType getVehicleType() throws IllegalArgumentException{
         System.out.println("Please select vehicle type from menu");
         System.out.println("1 CAR");
         System.out.println("2 BIKE");
@@ -103,7 +104,7 @@ public class ParkingService {
         }
     }
 
-    public void processExitingVehicle() {
+    public void processExitingVehicle(){
         try{
             String vehicleRegNumber = getVehicleRegNumber();
             Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);
@@ -151,4 +152,5 @@ public class ParkingService {
             logger.error("Unable to process exiting vehicle",e);
         }
     }
+
 }
