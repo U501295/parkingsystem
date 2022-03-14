@@ -51,6 +51,7 @@ public class ParkingServiceTest {
         }
     }
 
+
     @Test
     public void processExitingVehicleTest() throws Exception {
         when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");

@@ -1,5 +1,6 @@
 package com.parkit.parkingsystem.integration;
 
+import com.parkit.parkingsystem.constants.Fare;
 import com.parkit.parkingsystem.dao.ParkingSpotDAO;
 import com.parkit.parkingsystem.dao.TicketDAO;
 import com.parkit.parkingsystem.integration.config.DataBaseTestConfig;
@@ -14,7 +15,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Date;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 //TODO: Show the integration tests
 @ExtendWith(MockitoExtension.class)
@@ -26,8 +30,10 @@ public class ParkingDataBaseIT {
     private static DataBasePrepareService dataBasePrepareService;
 
 
+
     @Mock
     private static InputReaderUtil inputReaderUtil;
+    private static ParkingService parkingService;
 
 
     @BeforeAll
@@ -48,7 +54,7 @@ public class ParkingDataBaseIT {
 
     @AfterAll
     private static void tearDown(){
-
+        dataBasePrepareService.clearDataBaseEntries();
     }
 
     @Test
@@ -87,8 +93,18 @@ public class ParkingDataBaseIT {
         parkingService.processIncomingVehicle();
         parkingService.processExitingVehicle();
         parkingService.processIncomingVehicle();
-        parkingService.processExitingVehicle();
+        parkingService.processExitingVehicleWith24HStay();
+
         assertThat(ticketDAO.getTicket("ABCDEF").getOutTime()).isNotNull();
+
+        long inTimeTest =ticketDAO.getTicket("ABCDEF").getInTime().getTime();
+        long outTimeTest = ticketDAO.getTicket("ABCDEF").getOutTime().getTime();
+        int sec_in_millisec = 1000, min_in_sec=60,hours_in_min=60;
+
+        double timeOfStay = (outTimeTest - inTimeTest) /(sec_in_millisec*min_in_sec*hours_in_min);
+
+        double expectedResult = (timeOfStay * Fare.CAR_RATE_PER_HOUR) - (0.05*(timeOfStay * Fare.CAR_RATE_PER_HOUR));
+        assertEquals( expectedResult , ticketDAO.getTicket("ABCDEF").getPrice());
 
 
     }

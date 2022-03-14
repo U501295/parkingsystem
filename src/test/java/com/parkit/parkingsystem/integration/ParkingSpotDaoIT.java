@@ -1,4 +1,4 @@
-package com.parkit.parkingsystem;
+package com.parkit.parkingsystem.integration;
 
 import com.parkit.parkingsystem.constants.ParkingType;
 import com.parkit.parkingsystem.dao.ParkingSpotDAO;
@@ -7,20 +7,19 @@ import com.parkit.parkingsystem.integration.config.DataBaseTestConfig;
 import com.parkit.parkingsystem.integration.service.DataBasePrepareService;
 import com.parkit.parkingsystem.model.ParkingSpot;
 import com.parkit.parkingsystem.model.Ticket;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.sql.SQLException;
-import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
-public class ParkingSpotDAOTest {
+public class ParkingSpotDaoIT {
 
     private static DataBaseTestConfig dataBaseTestConfig = new DataBaseTestConfig();
     private TicketDAO ticketDAO;
@@ -43,11 +42,17 @@ public class ParkingSpotDAOTest {
             ticket.setPrice(2.0);
             ticket.setInTime(new Date(System.currentTimeMillis()));
             ticket.setOutTime(new Date(System.currentTimeMillis() + (24 * 60 * 60 * 1000)));
+            dataBasePrepareService.clearDataBaseEntries();
 
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("Failed to set up test mock objects");
         }
+    }
+
+    @AfterAll
+    private static void tearDown(){
+        dataBasePrepareService.clearDataBaseEntries();
     }
 
     @Test
