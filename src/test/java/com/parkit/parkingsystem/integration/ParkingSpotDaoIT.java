@@ -16,17 +16,23 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.sql.SQLException;
 import java.util.Date;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(MockitoExtension.class)
 public class ParkingSpotDaoIT {
 
-    private static DataBaseTestConfig dataBaseTestConfig = new DataBaseTestConfig();
+    private static final DataBaseTestConfig dataBaseTestConfig = new DataBaseTestConfig();
+    private static DataBasePrepareService dataBasePrepareService;
     private TicketDAO ticketDAO;
     private Ticket ticket;
     private ParkingSpot parkingSpot;
     private ParkingSpotDAO parkingSpotDAO;
-    private static DataBasePrepareService dataBasePrepareService;
+
+    @AfterAll
+    private static void tearDown() {
+        dataBasePrepareService.clearDataBaseEntries();
+    }
 
     @BeforeEach
     private void setUpPerTest() {
@@ -50,25 +56,20 @@ public class ParkingSpotDaoIT {
         }
     }
 
-    @AfterAll
-    private static void tearDown(){
-        dataBasePrepareService.clearDataBaseEntries();
-    }
-
     @Test
-    public void getNextAvailableSlotFunctionnal() throws SQLException, ClassNotFoundException {
-        assertEquals(parkingSpotDAO.getNextAvailableSlot(ticket.getParkingSpot().getParkingType()),1);
+    public void WhenACarIsComing_AndTheParkingIsEmpty_ThenTheFirstSportISAvailable() throws SQLException, ClassNotFoundException {
+        assertEquals(parkingSpotDAO.getNextAvailableSlot(ticket.getParkingSpot().getParkingType()), 1);
 
     }
 
     @Test
-    public void updateParkingTrue() throws SQLException, ClassNotFoundException {
+    public void WhenACarIsComing_AndTheParkingIsEmptyWithMoreThanOneAvailableSpot_ThenTheNextSpotBecomesAvailable() throws SQLException, ClassNotFoundException {
         assertTrue(parkingSpotDAO.updateParking(ticket.getParkingSpot()));
 
     }
 
 
-    }
+}
 
 
 

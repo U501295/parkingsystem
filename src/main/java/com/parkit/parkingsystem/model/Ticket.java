@@ -59,9 +59,12 @@ public class Ticket {
         this.outTime = outTime;
     }
 
-    public boolean getIsRecurring(){return isRecurring;}
+    public boolean getIsRecurring() {
+        return isRecurring;
+    }
 
-    public void setIsRecurring(boolean isRecurring){this.isRecurring= isRecurring;
+    public void setIsRecurring(boolean isRecurring) {
+        this.isRecurring = isRecurring;
     }
 
 
