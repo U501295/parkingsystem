@@ -82,7 +82,6 @@ public class parkingDataBaseIT {
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         parkingService.processExitingVehicle();
         assertThat(ticketDAO.getTicket("ABCDEF").getOutTime()).isNotNull();
-        assertThat(ticketDAO.getTicket("ABCDEF").getPrice()).isNotZero();
     }
 
     @Test

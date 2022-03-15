@@ -25,15 +25,11 @@ public class DataBaseConfig {
     public Connection getConnection() throws ClassNotFoundException, SQLException, IOException {
         logger.info("Create DB connection");
         Properties props = new Properties();
-        try{
-            FileInputStream fis = new FileInputStream("conf.properties");
+        try(FileInputStream fis = new FileInputStream("conf.properties")){
             props.load(fis);
         }catch (IOException e)
         {
             logger.error("Error while fetching file", e);
-        }finally
-        {
-
         }
 
         Class.forName(props.getProperty("jdbc.driver.class"));
