@@ -69,7 +69,7 @@ public class parkingDataBaseIT {
     }
 
     @Test
-    public void WhenACarIsComing_ThenTheDataBaseResponds() throws SQLException, ClassNotFoundException, IOException {
+    public void WhenACarIsComing_ThenTheDataBaseResponds(){
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         parkingService.processIncomingVehicle();
         assertThat(ticketDAO.getTicket("ABCDEF")).isNotNull();
@@ -77,7 +77,7 @@ public class parkingDataBaseIT {
     }
 
     @Test
-    public void WhenACarIsLeaving_ThenTheDataBaseResponds() throws SQLException, ClassNotFoundException, IOException {
+    public void WhenACarIsLeaving_ThenTheDataBaseResponds(){
         WhenACarIsComing_ThenTheDataBaseResponds();
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         parkingService.processExitingVehicle();
@@ -86,7 +86,7 @@ public class parkingDataBaseIT {
     }
 
     @Test
-    public void WhenACarIsComingBack_ThenItIsFlaggedAsRecurring() throws SQLException, ClassNotFoundException, IOException {
+    public void WhenACarIsComingBack_ThenItIsFlaggedAsRecurring(){
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         //On simule le premier aller retour d'une voiture
         parkingService.processIncomingVehicle();
@@ -98,7 +98,7 @@ public class parkingDataBaseIT {
 
 
     @Test
-    public void WhenARecurringCarIsLeaving_ThenThePriceReductionIsApplied() throws SQLException, ClassNotFoundException, IOException {
+    public void WhenARecurringCarIsLeaving_ThenThePriceReductionIsApplied(){
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         parkingService.processIncomingVehicle();
         parkingService.processExitingVehicle();

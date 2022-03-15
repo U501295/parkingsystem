@@ -32,14 +32,16 @@ public class ParkingSpotDAO {
      * Pour le " if (rs.next())" --> Un result set doit être porté au conteneur suivant pour récupérer les données
      * d'une base
      */
-    public int getNextAvailableSlot(ParkingType parkingType) throws SQLException, ClassNotFoundException, IOException {
+    public int getNextAvailableSlot(ParkingType parkingType) {
         Connection con = null;
         int result = -1;
-        con = dataBaseConfig.getConnection();
-        PreparedStatement ps = con.prepareStatement(DBConstants.GET_NEXT_PARKING_SPOT);
-        ps.setString(1, parkingType.toString());
-        ResultSet rs = ps.executeQuery();
+        ResultSet rs = null;
+        PreparedStatement ps = null;
         try {
+            con = dataBaseConfig.getConnection();
+            ps = con.prepareStatement(DBConstants.GET_NEXT_PARKING_SPOT);
+            ps.setString(1, parkingType.toString());
+            rs = ps.executeQuery();
             if (rs.next()) {
                 result = rs.getInt(1);
             }
@@ -58,12 +60,13 @@ public class ParkingSpotDAO {
      * @see DataBaseConfig
      * Un result set doit être porté au conteneur suivant pour récupérer les données d'une base
      */
-    public boolean updateParking(ParkingSpot parkingSpot) throws SQLException, ClassNotFoundException, IOException {
+    public boolean updateParking(ParkingSpot parkingSpot) {
         //update the availability fo that parking slot
         Connection con = null;
-        con = dataBaseConfig.getConnection();
-        PreparedStatement ps = con.prepareStatement(DBConstants.UPDATE_PARKING_SPOT);
+        PreparedStatement ps = null;
         try {
+            con = dataBaseConfig.getConnection();
+            ps = con.prepareStatement(DBConstants.UPDATE_PARKING_SPOT);
             ps.setBoolean(1, parkingSpot.isAvailable());
             ps.setInt(2, parkingSpot.getId());
             int updateRowCount = ps.executeUpdate();

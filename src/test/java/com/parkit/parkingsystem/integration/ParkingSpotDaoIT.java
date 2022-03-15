@@ -59,13 +59,13 @@ public class ParkingSpotDaoIT {
     }
 
     @Test
-    public void WhenACarIsComing_AndTheParkingIsEmpty_ThenTheFirstSportISAvailable() throws SQLException, ClassNotFoundException, IOException {
+    public void WhenACarIsComing_AndTheParkingIsEmpty_ThenTheFirstSportISAvailable(){
         assertEquals(parkingSpotDAO.getNextAvailableSlot(ticket.getParkingSpot().getParkingType()), 1);
 
     }
 
     @Test
-    public void WhenACarIsComing_AndTheParkingIsEmptyWithMoreThanOneAvailableSpot_ThenTheNextSpotBecomesAvailable() throws SQLException, ClassNotFoundException, IOException {
+    public void WhenACarIsComing_AndTheParkingIsEmptyWithMoreThanOneAvailableSpot_ThenTheNextSpotBecomesAvailable(){
         assertTrue(parkingSpotDAO.updateParking(ticket.getParkingSpot()));
 
     }

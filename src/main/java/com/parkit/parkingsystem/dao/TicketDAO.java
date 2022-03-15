@@ -24,12 +24,13 @@ public class TicketDAO {
     private static final Logger logger = LogManager.getLogger("TicketDAO");
     public DataBaseConfig dataBaseConfig = new DataBaseConfig();
 
-    public boolean saveTicket(Ticket ticket) throws SQLException, ClassNotFoundException, IOException {
+    public boolean saveTicket(Ticket ticket) {
         Connection con = null;
         boolean result = false;
-        con = dataBaseConfig.getConnection();
-        PreparedStatement ps = con.prepareStatement(DBConstants.SAVE_TICKET);
+        PreparedStatement ps = null;
         try {
+            con = dataBaseConfig.getConnection();
+            ps = con.prepareStatement(DBConstants.SAVE_TICKET);
             //(ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
             ps.setInt(1, ticket.getParkingSpot().getId());
             ps.setString(2, ticket.getVehicleRegNumber());
@@ -47,14 +48,16 @@ public class TicketDAO {
         return result;
     }
 
-    public Ticket getTicket(String vehicleRegNumber) throws SQLException, ClassNotFoundException, IOException {
+    public Ticket getTicket(String vehicleRegNumber){
         Connection con = null;
         Ticket ticket = null;
-        con = dataBaseConfig.getConnection();
-        PreparedStatement ps = con.prepareStatement(DBConstants.GET_TICKET);
-        ps.setString(1, vehicleRegNumber);
-        ResultSet rs = ps.executeQuery();
+        ResultSet rs = null;
+        PreparedStatement ps = null;
         try {
+            con = dataBaseConfig.getConnection();
+            ps = con.prepareStatement(DBConstants.GET_TICKET);
+            ps.setString(1, vehicleRegNumber);
+            rs = ps.executeQuery();
             if (rs.next()) {
                 ticket = new Ticket();
                 ParkingSpot parkingSpot = new ParkingSpot(rs.getInt(1), ParkingType.valueOf(rs.getString(6)), false);
@@ -75,11 +78,12 @@ public class TicketDAO {
         return ticket;
     }
 
-    public boolean updateTicket(Ticket ticket) throws SQLException, ClassNotFoundException, IOException {
+    public boolean updateTicket(Ticket ticket) {
         Connection con = null;
-        con = dataBaseConfig.getConnection();
-        PreparedStatement ps = con.prepareStatement(DBConstants.UPDATE_TICKET);
+        PreparedStatement ps = null;
         try {
+            con = dataBaseConfig.getConnection();
+            ps = con.prepareStatement(DBConstants.UPDATE_TICKET);
             ps.setDouble(1, ticket.getPrice());
             ps.setTimestamp(2, new Timestamp(ticket.getOutTime().getTime()));
             ps.setInt(3, ticket.getId());
@@ -95,15 +99,17 @@ public class TicketDAO {
     }
 
 
-    public boolean isTicketFromRecurrentUser(String vehicleRegNumber) throws SQLException, ClassNotFoundException, IOException {
+    public boolean isTicketFromRecurrentUser(String vehicleRegNumber) {
         Connection con = null;
         boolean recurring = false;
         int count = 0;
-        con = dataBaseConfig.getConnection();
-        PreparedStatement ps = con.prepareStatement(DBConstants.IS_RECURRING);
-        ps.setString(1, vehicleRegNumber);
-        ResultSet rs = ps.executeQuery();
+        ResultSet rs = null;
+        PreparedStatement ps = null;
         try {
+            con = dataBaseConfig.getConnection();
+            ps = con.prepareStatement(DBConstants.IS_RECURRING);
+            ps.setString(1, vehicleRegNumber);
+            rs = ps.executeQuery();
             if (rs.next()) {
                 count = rs.getInt(1);
             }

@@ -31,7 +31,6 @@ public class ParkingServiceTest {
     private static DataBaseTestConfig dataBaseTestConfig = new DataBaseTestConfig();
     private static ParkingService parkingService;
     private static Ticket ticket;
-    private static ParkingSpot parkingSpot;
 
     @Mock
     private static InputReaderUtil inputReaderUtil;
@@ -65,12 +64,10 @@ public class ParkingServiceTest {
             Assertions.assertThat(e)
                     .isInstanceOf(IllegalArgumentException.class);
         }
-        // assertThrows(IllegalArgumentException.class, () -> parkingService.getVehicleType());
-
     }
 
     @Test
-    public void getNextParkingNumberIfAvailableTest() throws SQLException, ClassNotFoundException, IOException {
+    public void getNextParkingNumberIfAvailableTest(){
 
         when(inputReaderUtil.readSelection()).thenReturn(1);
         when(parkingSpotDAO.getNextAvailableSlot(any(ParkingType.class))).thenReturn(1);
@@ -80,7 +77,7 @@ public class ParkingServiceTest {
     }
 
     @Test
-    public void ErrorWhenParkingIsFull() throws SQLException, ClassNotFoundException, IOException {
+    public void ErrorWhenParkingIsFull(){
         when(inputReaderUtil.readSelection()).thenReturn(1);
         when(parkingSpotDAO.getNextAvailableSlot(any(ParkingType.class))).thenReturn(0);
         try {
@@ -108,7 +105,7 @@ public class ParkingServiceTest {
     }*/
 
     @Test
-    public void processExitingVehicleWith24HStay() throws Exception {
+    public void processExitingVehicleWith24HStay(){
         when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
         when(ticketDAO.getTicket(anyString())).thenReturn(ticket);
         when(ticketDAO.updateTicket(any(Ticket.class))).thenReturn(true);
@@ -119,7 +116,7 @@ public class ParkingServiceTest {
     }
 
     @Test
-    public void processIncomingVehicle() throws SQLException, ClassNotFoundException, IOException {
+    public void processIncomingVehicle(){
         when(inputReaderUtil.readSelection()).thenReturn(1);
         when(parkingSpotDAO.getNextAvailableSlot(any(ParkingType.class))).thenReturn(1);
         parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
@@ -129,7 +126,7 @@ public class ParkingServiceTest {
     }
 
     @Test
-    public void ErrorProcessIncomingVehicle() throws SQLException, ClassNotFoundException, IOException {
+    public void ErrorProcessIncomingVehicle(){
         when(inputReaderUtil.readSelection()).thenReturn(1);
         when(parkingSpotDAO.getNextAvailableSlot(any(ParkingType.class))).thenReturn(0);
         parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);

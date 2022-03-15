@@ -53,7 +53,7 @@ public class TicketDaoIT {
     }
 
     @Test
-    public void WhenACarIsComing_ThenItsTicketIsSaved() throws SQLException, ClassNotFoundException, IOException {
+    public void WhenACarIsComing_ThenItsTicketIsSaved(){
         // il n'est pas possible de mocker la base de donnée étant donné qu'elle est créée directement dans saveTicket
         assertTrue(ticketDAO.saveTicket(ticket));
 
@@ -61,14 +61,14 @@ public class TicketDaoIT {
     }
 
     @Test
-    public void WhenTicketIsNull_ThenItIsNotSaved() throws SQLException, ClassNotFoundException, IOException {
+    public void WhenTicketIsNull_ThenItIsNotSaved(){
         // il n'est pas possible de mocker la base de donnée étant donné qu'elle est créée directement dans saveTicket
         assertFalse(ticketDAO.saveTicket(null));
 
     }
 
     @Test
-    public void WhenTicketIsSaved_ThenItIsPossibleToFetchItsData() throws SQLException, ClassNotFoundException, IOException {
+    public void WhenTicketIsSaved_ThenItIsPossibleToFetchItsData(){
         // il n'est pas possible de mocker la base de donnée étant donné qu'elle est créée directement dans saveTicket
         ticketDAO.saveTicket(ticket);
         Ticket test = ticketDAO.getTicket(ticket.getVehicleRegNumber());
@@ -79,7 +79,7 @@ public class TicketDaoIT {
 
 
     @Test
-    public void RecurringFalse() throws SQLException, ClassNotFoundException, IOException {
+    public void RecurringFalse(){
         ticket.setVehicleRegNumber("FALSE");
         assertFalse(ticketDAO.isTicketFromRecurrentUser(ticket.getVehicleRegNumber()));
         ticket.setVehicleRegNumber("TEST");
@@ -87,20 +87,20 @@ public class TicketDaoIT {
     }
 
     @Test
-    public void RecurringTrue() throws SQLException, ClassNotFoundException, IOException {
+    public void RecurringTrue(){
         ticketDAO.saveTicket(ticket);
         assertTrue(ticketDAO.isTicketFromRecurrentUser(ticket.getVehicleRegNumber()));
 
     }
 
     @Test
-    public void UpdateTicketTrue() throws SQLException, ClassNotFoundException, IOException {
+    public void UpdateTicketTrue(){
         assertTrue(ticketDAO.updateTicket(ticket));
 
     }
 
     @Test
-    public void UpdateTicketFalse() throws SQLException, ClassNotFoundException, IOException {
+    public void UpdateTicketFalse(){
         assertFalse(ticketDAO.updateTicket(null));
 
     }
