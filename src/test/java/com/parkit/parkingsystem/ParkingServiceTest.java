@@ -16,6 +16,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Date;
 
@@ -69,7 +70,7 @@ public class ParkingServiceTest {
     }
 
     @Test
-    public void getNextParkingNumberIfAvailableTest() throws SQLException, ClassNotFoundException {
+    public void getNextParkingNumberIfAvailableTest() throws SQLException, ClassNotFoundException, IOException {
 
         when(inputReaderUtil.readSelection()).thenReturn(1);
         when(parkingSpotDAO.getNextAvailableSlot(any(ParkingType.class))).thenReturn(1);
@@ -79,7 +80,7 @@ public class ParkingServiceTest {
     }
 
     @Test
-    public void ErrorWhenParkingIsFull() throws SQLException, ClassNotFoundException {
+    public void ErrorWhenParkingIsFull() throws SQLException, ClassNotFoundException, IOException {
         when(inputReaderUtil.readSelection()).thenReturn(1);
         when(parkingSpotDAO.getNextAvailableSlot(any(ParkingType.class))).thenReturn(0);
         try {
@@ -118,7 +119,7 @@ public class ParkingServiceTest {
     }
 
     @Test
-    public void processIncomingVehicle() throws SQLException, ClassNotFoundException {
+    public void processIncomingVehicle() throws SQLException, ClassNotFoundException, IOException {
         when(inputReaderUtil.readSelection()).thenReturn(1);
         when(parkingSpotDAO.getNextAvailableSlot(any(ParkingType.class))).thenReturn(1);
         parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
@@ -128,7 +129,7 @@ public class ParkingServiceTest {
     }
 
     @Test
-    public void ErrorProcessIncomingVehicle() throws SQLException, ClassNotFoundException {
+    public void ErrorProcessIncomingVehicle() throws SQLException, ClassNotFoundException, IOException {
         when(inputReaderUtil.readSelection()).thenReturn(1);
         when(parkingSpotDAO.getNextAvailableSlot(any(ParkingType.class))).thenReturn(0);
         parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);

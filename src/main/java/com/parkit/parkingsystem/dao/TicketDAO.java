@@ -8,6 +8,7 @@ import com.parkit.parkingsystem.model.Ticket;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.IOException;
 import java.sql.*;
 
 
@@ -23,7 +24,7 @@ public class TicketDAO {
     private static final Logger logger = LogManager.getLogger("TicketDAO");
     public DataBaseConfig dataBaseConfig = new DataBaseConfig();
 
-    public boolean saveTicket(Ticket ticket) throws SQLException, ClassNotFoundException {
+    public boolean saveTicket(Ticket ticket) throws SQLException, ClassNotFoundException, IOException {
         Connection con = null;
         boolean result = false;
         con = dataBaseConfig.getConnection();
@@ -46,7 +47,7 @@ public class TicketDAO {
         return result;
     }
 
-    public Ticket getTicket(String vehicleRegNumber) throws SQLException, ClassNotFoundException {
+    public Ticket getTicket(String vehicleRegNumber) throws SQLException, ClassNotFoundException, IOException {
         Connection con = null;
         Ticket ticket = null;
         con = dataBaseConfig.getConnection();
@@ -74,7 +75,7 @@ public class TicketDAO {
         return ticket;
     }
 
-    public boolean updateTicket(Ticket ticket) throws SQLException, ClassNotFoundException {
+    public boolean updateTicket(Ticket ticket) throws SQLException, ClassNotFoundException, IOException {
         Connection con = null;
         con = dataBaseConfig.getConnection();
         PreparedStatement ps = con.prepareStatement(DBConstants.UPDATE_TICKET);
@@ -94,7 +95,7 @@ public class TicketDAO {
     }
 
 
-    public boolean isTicketFromRecurrentUser(String vehicleRegNumber) throws SQLException, ClassNotFoundException {
+    public boolean isTicketFromRecurrentUser(String vehicleRegNumber) throws SQLException, ClassNotFoundException, IOException {
         Connection con = null;
         boolean recurring = false;
         int count = 0;

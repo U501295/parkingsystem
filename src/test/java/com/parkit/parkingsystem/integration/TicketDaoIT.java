@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Date;
 
@@ -21,8 +22,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @ExtendWith(MockitoExtension.class)
 public class TicketDaoIT {
 
-    private static final DataBaseTestConfig dataBaseTestConfig = new DataBaseTestConfig();
-    private static DataBasePrepareService dataBasePrepareService;
+    private DataBaseTestConfig dataBaseTestConfig = new DataBaseTestConfig();
+    private static DataBasePrepareService dataBasePrepareService = new DataBasePrepareService();
     private TicketDAO ticketDAO;
     private Ticket ticket;
 
@@ -43,7 +44,7 @@ public class TicketDaoIT {
             ticket.setPrice(2.0);
             ticket.setInTime(new Date(System.currentTimeMillis()));
             ticket.setOutTime(new Date(System.currentTimeMillis() + (24 * 60 * 60 * 1000)));
-            //dataBasePrepareService.clearDataBaseEntries();
+            dataBasePrepareService.clearDataBaseEntries();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -52,7 +53,7 @@ public class TicketDaoIT {
     }
 
     @Test
-    public void WhenACarIsComing_ThenItsTicketIsSaved() throws SQLException, ClassNotFoundException {
+    public void WhenACarIsComing_ThenItsTicketIsSaved() throws SQLException, ClassNotFoundException, IOException {
         // il n'est pas possible de mocker la base de donnée étant donné qu'elle est créée directement dans saveTicket
         assertTrue(ticketDAO.saveTicket(ticket));
 
@@ -60,14 +61,14 @@ public class TicketDaoIT {
     }
 
     @Test
-    public void WhenTicketIsNull_ThenItIsNotSaved() throws SQLException, ClassNotFoundException {
+    public void WhenTicketIsNull_ThenItIsNotSaved() throws SQLException, ClassNotFoundException, IOException {
         // il n'est pas possible de mocker la base de donnée étant donné qu'elle est créée directement dans saveTicket
         assertFalse(ticketDAO.saveTicket(null));
 
     }
 
     @Test
-    public void WhenTicketIsSaved_ThenItIsPossibleToFetchItsData() throws SQLException, ClassNotFoundException {
+    public void WhenTicketIsSaved_ThenItIsPossibleToFetchItsData() throws SQLException, ClassNotFoundException, IOException {
         // il n'est pas possible de mocker la base de donnée étant donné qu'elle est créée directement dans saveTicket
         ticketDAO.saveTicket(ticket);
         Ticket test = ticketDAO.getTicket(ticket.getVehicleRegNumber());
@@ -78,7 +79,7 @@ public class TicketDaoIT {
 
 
     @Test
-    public void RecurringFalse() throws SQLException, ClassNotFoundException {
+    public void RecurringFalse() throws SQLException, ClassNotFoundException, IOException {
         ticket.setVehicleRegNumber("FALSE");
         assertFalse(ticketDAO.isTicketFromRecurrentUser(ticket.getVehicleRegNumber()));
         ticket.setVehicleRegNumber("TEST");
@@ -86,20 +87,20 @@ public class TicketDaoIT {
     }
 
     @Test
-    public void RecurringTrue() throws SQLException, ClassNotFoundException {
+    public void RecurringTrue() throws SQLException, ClassNotFoundException, IOException {
         ticketDAO.saveTicket(ticket);
         assertTrue(ticketDAO.isTicketFromRecurrentUser(ticket.getVehicleRegNumber()));
 
     }
 
     @Test
-    public void UpdateTicketTrue() throws SQLException, ClassNotFoundException {
+    public void UpdateTicketTrue() throws SQLException, ClassNotFoundException, IOException {
         assertTrue(ticketDAO.updateTicket(ticket));
 
     }
 
     @Test
-    public void UpdateTicketFalse() throws SQLException, ClassNotFoundException {
+    public void UpdateTicketFalse() throws SQLException, ClassNotFoundException, IOException {
         assertFalse(ticketDAO.updateTicket(null));
 
     }

@@ -7,6 +7,7 @@ import com.parkit.parkingsystem.model.ParkingSpot;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -31,7 +32,7 @@ public class ParkingSpotDAO {
      * Pour le " if (rs.next())" --> Un result set doit être porté au conteneur suivant pour récupérer les données
      * d'une base
      */
-    public int getNextAvailableSlot(ParkingType parkingType) throws SQLException, ClassNotFoundException {
+    public int getNextAvailableSlot(ParkingType parkingType) throws SQLException, ClassNotFoundException, IOException {
         Connection con = null;
         int result = -1;
         con = dataBaseConfig.getConnection();
@@ -57,7 +58,7 @@ public class ParkingSpotDAO {
      * @see DataBaseConfig
      * Un result set doit être porté au conteneur suivant pour récupérer les données d'une base
      */
-    public boolean updateParking(ParkingSpot parkingSpot) throws SQLException, ClassNotFoundException {
+    public boolean updateParking(ParkingSpot parkingSpot) throws SQLException, ClassNotFoundException, IOException {
         //update the availability fo that parking slot
         Connection con = null;
         con = dataBaseConfig.getConnection();

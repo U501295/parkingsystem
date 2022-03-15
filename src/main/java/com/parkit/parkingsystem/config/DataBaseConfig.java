@@ -3,6 +3,9 @@ package com.parkit.parkingsystem.config;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.sql.*;
 import java.util.Properties;
 
@@ -19,9 +22,20 @@ public class DataBaseConfig {
 
     private static final Logger logger = LogManager.getLogger("DataBaseConfig");
 
-    public Connection getConnection() throws ClassNotFoundException, SQLException {
+    public Connection getConnection() throws ClassNotFoundException, SQLException, IOException {
         logger.info("Create DB connection");
         Properties props = new Properties();
+        try{
+            FileInputStream fis = new FileInputStream("conf.properties");
+            props.load(fis);
+        }catch (IOException e)
+        {
+            logger.error("Error while fetching file", e);
+        }finally
+        {
+
+        }
+
         Class.forName(props.getProperty("jdbc.driver.class"));
         return DriverManager.getConnection(
                 props.getProperty("jdbc.url.prod"),

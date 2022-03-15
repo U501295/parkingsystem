@@ -15,6 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.io.IOException;
 import java.sql.SQLException;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -64,11 +65,11 @@ public class parkingDataBaseIT {
     private void setUpPerTest() throws Exception {
         when(inputReaderUtil.readSelection()).thenReturn(1);
         when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
-        //dataBasePrepareService.clearDataBaseEntries();
+        dataBasePrepareService.clearDataBaseEntries();
     }
 
     @Test
-    public void WhenACarIsComing_ThenTheDataBaseResponds() throws SQLException, ClassNotFoundException {
+    public void WhenACarIsComing_ThenTheDataBaseResponds() throws SQLException, ClassNotFoundException, IOException {
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         parkingService.processIncomingVehicle();
         assertThat(ticketDAO.getTicket("ABCDEF")).isNotNull();
@@ -76,7 +77,7 @@ public class parkingDataBaseIT {
     }
 
     @Test
-    public void WhenACarIsLeaving_ThenTheDataBaseResponds() throws SQLException, ClassNotFoundException {
+    public void WhenACarIsLeaving_ThenTheDataBaseResponds() throws SQLException, ClassNotFoundException, IOException {
         WhenACarIsComing_ThenTheDataBaseResponds();
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         parkingService.processExitingVehicle();
@@ -85,7 +86,7 @@ public class parkingDataBaseIT {
     }
 
     @Test
-    public void WhenACarIsComingBack_ThenItIsFlaggedAsRecurring() throws SQLException, ClassNotFoundException {
+    public void WhenACarIsComingBack_ThenItIsFlaggedAsRecurring() throws SQLException, ClassNotFoundException, IOException {
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         //On simule le premier aller retour d'une voiture
         parkingService.processIncomingVehicle();
@@ -97,7 +98,7 @@ public class parkingDataBaseIT {
 
 
     @Test
-    public void WhenARecurringCarIsLeaving_ThenThePriceReductionIsApplied() throws SQLException, ClassNotFoundException {
+    public void WhenARecurringCarIsLeaving_ThenThePriceReductionIsApplied() throws SQLException, ClassNotFoundException, IOException {
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         parkingService.processIncomingVehicle();
         parkingService.processExitingVehicle();
