@@ -26,7 +26,7 @@ public class ParkingSpotDaoIT {
     private Ticket ticket;
     private ParkingSpot parkingSpot;
     private ParkingSpotDAO parkingSpotDAO;
-    private static DataBasePrepareService dataBasePrepareService;
+    private static DataBasePrepareService dataBasePrepareService = new DataBasePrepareService();
 
     @BeforeEach
     private void setUpPerTest() {
@@ -50,10 +50,10 @@ public class ParkingSpotDaoIT {
         }
     }
 
-    @AfterAll
+    /*@AfterAll
     private static void tearDown(){
         dataBasePrepareService.clearDataBaseEntries();
-    }
+    }*/
 
     @Test
     public void getNextAvailableSlotFunctionnal() throws SQLException, ClassNotFoundException {

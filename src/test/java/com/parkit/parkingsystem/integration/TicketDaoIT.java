@@ -24,7 +24,7 @@ public class TicketDaoIT {
     private static DataBaseTestConfig dataBaseTestConfig = new DataBaseTestConfig();
     private TicketDAO ticketDAO;
     private Ticket ticket;
-    private static DataBasePrepareService dataBasePrepareService;
+    private DataBasePrepareService dataBasePrepareService = new DataBasePrepareService();
 
 
     @BeforeEach
@@ -50,10 +50,10 @@ public class TicketDaoIT {
         }
     }
 
-    @AfterAll
+    /*@AfterAll
     private static void tearDown(){
         dataBasePrepareService.clearDataBaseEntries();
-    }
+    }*/
 
     @Test
     public void saveTicketTrue(){
