@@ -84,20 +84,7 @@
       <recent name="com.parkit.parkingsystem" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.App">
-    <configuration name="App" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="com.parkit.parkingsystem.App" />
-      <module name="parking-system" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.parkit.parkingsystem.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
+  <component name="RunManager" selected="JUnit.ParkingSpotTest">
     <configuration name="FareCalculatorServiceTest.calculateFareCarWith33Min" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="parking-system" />
       <extension name="coverage">
@@ -161,13 +148,28 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="ParkingSpotTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="parking-system" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.parkit.parkingsystem.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.parkit.parkingsystem" />
+      <option name="MAIN_CLASS_NAME" value="com.parkit.parkingsystem.ParkingSpotTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.ParkingSpotTest" />
         <item itemvalue="JUnit.ParkingServiceTest" />
         <item itemvalue="JUnit.FareCalculatorServiceTest.calculateFareCarWithOneDayDiff" />
         <item itemvalue="JUnit.FareCalculatorServiceTest.calculateFareCarWithLessThan30Min" />
         <item itemvalue="JUnit.FareCalculatorServiceTest.calculateFareCarWith33Min" />
-        <item itemvalue="Application.App" />
       </list>
     </recent_temporary>
   </component>
