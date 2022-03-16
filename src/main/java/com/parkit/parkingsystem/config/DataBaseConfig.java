@@ -22,7 +22,7 @@ public class DataBaseConfig {
 
     private static final Logger logger = LogManager.getLogger("DataBaseConfig");
 
-    public Connection getConnection() throws ClassNotFoundException, SQLException, IOException {
+    public Connection getConnection() throws ClassNotFoundException, SQLException{
         logger.info("Create DB connection");
         Properties props = new Properties();
         try(FileInputStream fis = new FileInputStream("conf.properties")){
