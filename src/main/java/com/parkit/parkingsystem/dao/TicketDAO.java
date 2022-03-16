@@ -14,7 +14,7 @@ import java.sql.*;
 
 /**
  * * @author : JULIEN BARONI
- * * @version : 1.0
+ * * @version : 2.0
  * *
  * * Cette classe implémente les fonctions de lecture, écriture et sauvegarde de ticket
  */
@@ -106,7 +106,14 @@ public class TicketDAO {
         return false;
     }
 
-
+    /**
+     *
+     * Cette fonction va compter dans la base de donnée le nombre d'occurences de la plaque d'immatriculation de
+     * l'utilisateur, si elle apparait déjà, alors l'utilisateur est récurrent
+     *
+     * @param vehicleRegNumber
+     * @return condition booléenne sur la recurrence de l'utilisateur
+     */
     public boolean isTicketFromRecurrentUser(String vehicleRegNumber) {
         Connection con = null;
         boolean recurring = false;
