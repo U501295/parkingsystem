@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="54180ceb-cc97-4327-8d40-b612c450b85c" name="Changes" comment="test : ajout des tests unitaires pour les ParkingSpotDAO" />
+    <list default="true" id="54180ceb-cc97-4327-8d40-b612c450b85c" name="Changes" comment="fix : gestion des conflits sur le merging avec chore/clean code" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -29,7 +29,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="feature/STORY1/FREE-30-MIN-PARKING" />
+        <entry key="$PROJECT_DIR$" value="dev" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -278,6 +278,16 @@
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
       <map>
+        <entry key="42025983-9a71-4af5-bcdf-48622d8d70a4">
+          <value>
+            <State />
+          </value>
+        </entry>
+        <entry key="896dcd41-7126-42fd-9b87-ef292ed9dc1e">
+          <value>
+            <State />
+          </value>
+        </entry>
         <entry key="MAIN">
           <value>
             <State>
