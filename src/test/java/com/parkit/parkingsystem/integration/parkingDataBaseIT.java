@@ -24,7 +24,7 @@ import static org.mockito.Mockito.when;
 
 /**
  * @author : JULIEN BARONI
- * @version : 1.0
+ * @version : 2.0
  * <p>
  * Cette classe permet de tester les échanges entre un utilisateur et la base de donnée
  * <p>
