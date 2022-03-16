@@ -45,7 +45,10 @@ public class ParkingSpotDAO {
             if (rs.next()) {
                 result = rs.getInt(1);
             }
-        } catch (Exception ex) {
+        } catch (RuntimeException e){
+            throw e;
+        }
+        catch (Exception ex) {
             logger.error("Error fetching next available slot", ex);
         } finally {
             dataBaseConfig.closeResultSet(rs);
@@ -71,7 +74,9 @@ public class ParkingSpotDAO {
             ps.setInt(2, parkingSpot.getId());
             int updateRowCount = ps.executeUpdate();
             return (updateRowCount == 1);
-        } catch (Exception ex) {
+        } catch (RuntimeException e){
+            throw e;
+        }catch (Exception ex) {
             logger.error("Error updating parking info", ex);
             return false;
         } finally {
