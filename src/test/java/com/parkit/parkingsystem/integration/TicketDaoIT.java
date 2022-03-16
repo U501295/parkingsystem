@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Date;
 
@@ -21,11 +22,15 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @ExtendWith(MockitoExtension.class)
 public class TicketDaoIT {
 
-    private static DataBaseTestConfig dataBaseTestConfig = new DataBaseTestConfig();
+    private DataBaseTestConfig dataBaseTestConfig = new DataBaseTestConfig();
+    private static DataBasePrepareService dataBasePrepareService = new DataBasePrepareService();
     private TicketDAO ticketDAO;
     private Ticket ticket;
-    private DataBasePrepareService dataBasePrepareService = new DataBasePrepareService();
 
+    @AfterAll
+    private static void tearDown() {
+        dataBasePrepareService.clearDataBaseEntries();
+    }
 
     @BeforeEach
     private void setUpPerTest() {
@@ -37,26 +42,18 @@ public class TicketDaoIT {
             ticket.setParkingSpot(parkingSpot);
             ticket.setVehicleRegNumber("TEST");
             ticket.setPrice(2.0);
-            //ticket.setInTime(new Date());
-            //ticket.setInTime(new Timestamp());
-            //ticket.setInTime(new Date(2022,03,10, 21,50,40));
             ticket.setInTime(new Date(System.currentTimeMillis()));
-            ticket.setOutTime(new Date(System.currentTimeMillis()  + (  24 * 60 * 60 * 1000)));
+            ticket.setOutTime(new Date(System.currentTimeMillis() + (24 * 60 * 60 * 1000)));
             dataBasePrepareService.clearDataBaseEntries();
 
         } catch (Exception e) {
             e.printStackTrace();
-            throw  new RuntimeException("Failed to set up test mock objects");
+            throw new RuntimeException("Failed to set up test mock objects");
         }
     }
 
-    /*@AfterAll
-    private static void tearDown(){
-        dataBasePrepareService.clearDataBaseEntries();
-    }*/
-
     @Test
-    public void saveTicketTrue(){
+    public void WhenACarIsComing_ThenItsTicketIsSaved(){
         // il n'est pas possible de mocker la base de donnée étant donné qu'elle est créée directement dans saveTicket
         assertTrue(ticketDAO.saveTicket(ticket));
 
@@ -64,14 +61,14 @@ public class TicketDaoIT {
     }
 
     @Test
-    public void saveTicketFalse() throws SQLException, ClassNotFoundException {
+    public void WhenTicketIsNull_ThenItIsNotSaved(){
         // il n'est pas possible de mocker la base de donnée étant donné qu'elle est créée directement dans saveTicket
         assertFalse(ticketDAO.saveTicket(null));
 
     }
 
     @Test
-    public void getTicketVariables() throws SQLException, ClassNotFoundException {
+    public void WhenTicketIsSaved_ThenItIsPossibleToFetchItsData(){
         // il n'est pas possible de mocker la base de donnée étant donné qu'elle est créée directement dans saveTicket
         ticketDAO.saveTicket(ticket);
         Ticket test = ticketDAO.getTicket(ticket.getVehicleRegNumber());
@@ -82,7 +79,7 @@ public class TicketDaoIT {
 
 
     @Test
-    public void RecurringFalse() throws SQLException, ClassNotFoundException {
+    public void RecurringFalse(){
         ticket.setVehicleRegNumber("FALSE");
         assertFalse(ticketDAO.isTicketFromRecurrentUser(ticket.getVehicleRegNumber()));
         ticket.setVehicleRegNumber("TEST");
@@ -90,27 +87,23 @@ public class TicketDaoIT {
     }
 
     @Test
-    public void RecurringTrue() throws SQLException, ClassNotFoundException {
+    public void RecurringTrue(){
         ticketDAO.saveTicket(ticket);
         assertTrue(ticketDAO.isTicketFromRecurrentUser(ticket.getVehicleRegNumber()));
 
     }
 
     @Test
-    public void UpdateTicketTrue() throws SQLException, ClassNotFoundException {
+    public void UpdateTicketTrue(){
         assertTrue(ticketDAO.updateTicket(ticket));
 
     }
 
     @Test
-    public void UpdateTicketFalse() throws SQLException, ClassNotFoundException {
+    public void UpdateTicketFalse(){
         assertFalse(ticketDAO.updateTicket(null));
 
     }
-
-
-
-
 
 
 }

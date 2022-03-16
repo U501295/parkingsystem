@@ -8,25 +8,33 @@ import com.parkit.parkingsystem.integration.service.DataBasePrepareService;
 import com.parkit.parkingsystem.model.ParkingSpot;
 import com.parkit.parkingsystem.model.Ticket;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Date;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(MockitoExtension.class)
 public class ParkingSpotDaoIT {
 
-    private static DataBaseTestConfig dataBaseTestConfig = new DataBaseTestConfig();
+    private DataBaseTestConfig dataBaseTestConfig = new DataBaseTestConfig();
+    private static DataBasePrepareService dataBasePrepareService = new DataBasePrepareService();
     private TicketDAO ticketDAO;
     private Ticket ticket;
     private ParkingSpot parkingSpot;
     private ParkingSpotDAO parkingSpotDAO;
-    private static DataBasePrepareService dataBasePrepareService = new DataBasePrepareService();
+
+    @AfterAll
+    private static void tearDown() {
+        dataBasePrepareService.clearDataBaseEntries();
+    }
 
     @BeforeEach
     private void setUpPerTest() {
@@ -42,7 +50,7 @@ public class ParkingSpotDaoIT {
             ticket.setPrice(2.0);
             ticket.setInTime(new Date(System.currentTimeMillis()));
             ticket.setOutTime(new Date(System.currentTimeMillis() + (24 * 60 * 60 * 1000)));
-            dataBasePrepareService.clearDataBaseEntries();
+            //dataBasePrepareService.clearDataBaseEntries();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -50,25 +58,20 @@ public class ParkingSpotDaoIT {
         }
     }
 
-    /*@AfterAll
-    private static void tearDown(){
-        dataBasePrepareService.clearDataBaseEntries();
-    }*/
-
     @Test
-    public void getNextAvailableSlotFunctionnal() throws SQLException, ClassNotFoundException {
-        assertEquals(parkingSpotDAO.getNextAvailableSlot(ticket.getParkingSpot().getParkingType()),1);
+    public void WhenACarIsComing_AndTheParkingIsEmpty_ThenTheFirstSportISAvailable(){
+        assertEquals(parkingSpotDAO.getNextAvailableSlot(ticket.getParkingSpot().getParkingType()), 1);
 
     }
 
     @Test
-    public void updateParkingTrue() throws SQLException, ClassNotFoundException {
+    public void WhenACarIsComing_AndTheParkingIsEmptyWithMoreThanOneAvailableSpot_ThenTheNextSpotBecomesAvailable(){
         assertTrue(parkingSpotDAO.updateParking(ticket.getParkingSpot()));
 
     }
 
 
-    }
+}
 
 
 
