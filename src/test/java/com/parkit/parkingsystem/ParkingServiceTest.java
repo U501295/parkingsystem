@@ -97,18 +97,15 @@ public class ParkingServiceTest {
         when(ticketDAO.updateTicket(any(Ticket.class))).thenReturn(true);
         when(parkingSpotDAO.updateParking(any(ParkingSpot.class))).thenReturn(true);
         parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
-        /*Date outTime = new Date();
-        outTime.setTime(ticket.getInTime().getTime() + (25 * 60 * 60 * 1000));
-        ticket.setOutTime(outTime);
-        parkingService.processExitingVehicle();*/
-        parkingService.processExitingVehicleWith25HStay();
-        double duration = (ticket.getOutTime().getTime()) - (ticket.getInTime().getTime());
-        Assertions.assertThat(duration).isEqualTo(25 * 60 * 60 * 1000);
+        Date inTime = new Date();
+        inTime.setTime(System.currentTimeMillis() - (25 * 60 * 60 * 1000));
+        ticket.setInTime(inTime);
+        parkingService.processExitingVehicle();
         Assertions.assertThat(ticket.getPrice()).isEqualTo(25 * 1.5);
     }
 
     @Test
-    public void When_processIncomingVehicle_thenATicketIsSaved(){
+    public void when_processIncomingVehicle_thenATicketIsSaved(){
         when(inputReaderUtil.readSelection()).thenReturn(1);
         when(parkingSpotDAO.getNextAvailableSlot(any(ParkingType.class))).thenReturn(1);
         parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
@@ -118,7 +115,7 @@ public class ParkingServiceTest {
     }
 
     @Test
-    public void When_processIncomingVehicle_andParkingIsFull_ThenGetError(){
+    public void when_processIncomingVehicle_andParkingIsFull_thenGetError(){
         when(inputReaderUtil.readSelection()).thenReturn(1);
         when(parkingSpotDAO.getNextAvailableSlot(any(ParkingType.class))).thenReturn(0);
         parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
@@ -132,7 +129,7 @@ public class ParkingServiceTest {
     }
 
     @Test
-    public void When_processExitingVehicleTest_Then_ParkingIsUpdated(){
+    public void when_processExitingVehicleTest_then_parkingIsUpdated(){
         when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
         when(ticketDAO.getTicket(anyString())).thenReturn(ticket);
         when(ticketDAO.updateTicket(any(Ticket.class))).thenReturn(true);
@@ -143,7 +140,7 @@ public class ParkingServiceTest {
     }
 
     @Test
-    public void VehicleRegNumberResult() throws Exception {
+    public void vehicleRegNumberResult() throws Exception {
         when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
         parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         assertEquals(parkingService.getVehicleRegNumber(), "ABCDEF");

@@ -126,30 +126,4 @@ public class ParkingService {
             logger.error("Unable to process exiting vehicle", e);
         }
     }
-
-    public void processExitingVehicleWith25HStay() {
-        try {
-            String vehicleRegNumber = getVehicleRegNumber();
-            Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);
-            Date outTime = new Date();
-            outTime.setTime(ticket.getInTime().getTime() + (25 * 60 * 60 * 1000));
-            ticket.setOutTime(outTime);
-            if (isRecurring == 1) {
-                ticket.setIsRecurring(true);
-            }
-            fareCalculatorService.calculateFare(ticket);
-            if (ticketDAO.updateTicket(ticket)) {
-                ParkingSpot parkingSpot = ticket.getParkingSpot();
-                parkingSpot.setAvailable(true);
-                parkingSpotDAO.updateParking(parkingSpot);
-                System.out.println("Please pay the parking fare:" + ticket.getPrice());
-                System.out.println("Recorded out-time for vehicle number:" + ticket.getVehicleRegNumber() + " is:" + outTime);
-            } else {
-                System.out.println("Unable to update ticket information. Error occurred");
-            }
-        } catch (Exception e) {
-            logger.error("Unable to process exiting vehicle", e);
-        }
-    }
-
 }
