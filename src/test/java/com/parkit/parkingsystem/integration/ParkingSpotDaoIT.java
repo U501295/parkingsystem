@@ -59,13 +59,13 @@ public class ParkingSpotDaoIT {
     }
 
     @Test
-    public void WhenACarIsComing_AndTheParkingIsEmpty_ThenTheFirstSportISAvailable(){
+    public void whenACarIsComing_andTheParkingIsEmpty_thenTheFirstSportISAvailable(){
         assertEquals(parkingSpotDAO.getNextAvailableSlot(ticket.getParkingSpot().getParkingType()), 1);
 
     }
 
     @Test
-    public void WhenACarIsComing_AndTheParkingIsEmptyWithMoreThanOneAvailableSpot_ThenTheNextSpotBecomesAvailable(){
+    public void whenACarIsComing_andTheParkingIsEmptyWithMoreThanOneAvailableSpot_thenTheNextSpotBecomesAvailable(){
         assertTrue(parkingSpotDAO.updateParking(ticket.getParkingSpot()));
 
     }

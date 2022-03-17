@@ -52,8 +52,6 @@ public class FareCalculatorService {
                     ticket.setPrice(duration * Fare.BIKE_RATE_PER_HOUR);
                     break;
                 }
-                default:
-                    throw new IllegalArgumentException("Unknown Parking Type");
             }
         }
         //TODO STORY #2 : 5% discount for recurring users

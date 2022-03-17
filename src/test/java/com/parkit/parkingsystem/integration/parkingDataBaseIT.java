@@ -66,7 +66,7 @@ public class parkingDataBaseIT {
     }
 
     @Test
-    public void WhenACarIsComing_ThenTheDataBaseResponds(){
+    public void whenACarIsComing_thenTheDataBaseResponds(){
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         parkingService.processIncomingVehicle();
         assertThat(ticketDAO.getTicket("ABCDEF")).isNotNull();
@@ -74,15 +74,15 @@ public class parkingDataBaseIT {
     }
 
     @Test
-    public void WhenACarIsLeaving_ThenTheDataBaseResponds(){
-        WhenACarIsComing_ThenTheDataBaseResponds();
+    public void whenACarIsLeaving_thenTheDataBaseResponds(){
+        whenACarIsComing_thenTheDataBaseResponds();
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         parkingService.processExitingVehicle();
         assertThat(ticketDAO.getTicket("ABCDEF").getOutTime()).isNotNull();
     }
 
     @Test
-    public void WhenACarIsComingBack_ThenItIsFlaggedAsRecurring(){
+    public void whenACarIsComingBack_thenItIsFlaggedAsRecurring(){
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         //On simule le premier aller retour d'une voiture
         parkingService.processIncomingVehicle();
@@ -94,7 +94,7 @@ public class parkingDataBaseIT {
 
 
     @Test
-    public void WhenARecurringCarIsLeaving_ThenThePriceReductionIsApplied(){
+    public void whenARecurringCarIsLeaving_thenThePriceReductionIsApplied(){
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         parkingService.processIncomingVehicle();
         parkingService.processExitingVehicle();

@@ -31,12 +31,9 @@ import static org.mockito.Mockito.*;
 public class InputReaderUtilTest {
 
 
-    @BeforeEach
-    private void setUpPerTest() {
 
-    }
     @Test
-    public void ReturnAnInt() {
+    public void returnAnInt() {
 
         InputReaderUtil scan = new InputReaderUtil();
         String input = "1";
@@ -47,7 +44,7 @@ public class InputReaderUtilTest {
     }
 
     @Test
-    public void GetError_WhenIsAskedToReturnAnIntegerInput_WithAStringInput() {
+    public void getError_WhenIsAskedToReturnAnIntegerInput_WithAStringInput() {
         InputReaderUtil scan = new InputReaderUtil();
         String input = "ABCDEF";
         InputStream in = new ByteArrayInputStream(input.getBytes());
@@ -63,7 +60,7 @@ public class InputReaderUtilTest {
     }
 
     @Test
-    public void ReturnAString() {
+    public void returnAString() {
         InputReaderUtil scan = new InputReaderUtil();
         String input = "ABCDEF";
         InputStream in = new ByteArrayInputStream(input.getBytes());
