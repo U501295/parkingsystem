@@ -15,6 +15,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Date;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
@@ -59,7 +61,7 @@ public class parkingDataBaseIT {
     }
 
     @BeforeEach
-    private void setUpPerTest() throws Exception {
+    private void setUpPerTest(){
         when(inputReaderUtil.readSelection()).thenReturn(1);
         when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
         dataBasePrepareService.clearDataBaseEntries();
@@ -106,13 +108,13 @@ public class parkingDataBaseIT {
          * On utilise une fonction qui renvoie un OutTime 24h plus tard que le inTime, la valeur aurait pu être
          * n'importe laquelle tant qu'elle était supérieure à 30 min
          */
-        parkingService.processExitingVehicleWith25HStay();
+        parkingService.processExitingVehicle("SIMULATION PLUS DE 24H");
         assertThat(ticketDAO.getTicket("ABCDEF").getOutTime()).isNotNull();
         long inTimeTest = ticketDAO.getTicket("ABCDEF").getInTime().getTime();
         long outTimeTest = ticketDAO.getTicket("ABCDEF").getOutTime().getTime();
         int sec_in_millisec = 1000, min_in_sec = 60, hours_in_min = 60;
         double timeOfStay = (outTimeTest - inTimeTest) / (sec_in_millisec * min_in_sec * hours_in_min);
-        double expectedResult = (timeOfStay * Fare.CAR_RATE_PER_HOUR) - (0.05 * (timeOfStay * Fare.CAR_RATE_PER_HOUR));
+        double expectedResult = (0.95*(timeOfStay * Fare.CAR_RATE_PER_HOUR));
         assertEquals(expectedResult, ticketDAO.getTicket("ABCDEF").getPrice());
     }
 
