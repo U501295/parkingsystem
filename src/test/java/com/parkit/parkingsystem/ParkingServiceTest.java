@@ -16,8 +16,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.io.IOException;
-import java.sql.SQLException;
 import java.util.Date;
 
 import static com.parkit.parkingsystem.constants.ParkingType.BIKE;
@@ -55,19 +53,20 @@ public class ParkingServiceTest {
 
 
     @Test
-    public void GetErrorWithGetVehicleType() {
+    public void getError_WhenVehicleTypeInput_IsIncorrect() {
         when(inputReaderUtil.readSelection()).thenReturn(0);
         parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         try {
             parkingService.getVehicleType();
-        } catch (IllegalArgumentException e) {
+        } catch (Exception e) {
             Assertions.assertThat(e)
-                    .isInstanceOf(IllegalArgumentException.class);
+                    .isInstanceOf(IllegalArgumentException.class)
+                    .hasMessage("Entered input is invalid");
         }
     }
 
     @Test
-    public void getNextParkingNumberIfAvailableTest(){
+    public void getNextParkingNumberIfAvailable_WhenASpotIsAvailable(){
 
         when(inputReaderUtil.readSelection()).thenReturn(1);
         when(parkingSpotDAO.getNextAvailableSlot(any(ParkingType.class))).thenReturn(1);
@@ -77,7 +76,7 @@ public class ParkingServiceTest {
     }
 
     @Test
-    public void ErrorWhenParkingIsFull(){
+    public void getError_With_getNextParkingNumberIfAvailable_WhenParkingIsFull(){
         when(inputReaderUtil.readSelection()).thenReturn(1);
         when(parkingSpotDAO.getNextAvailableSlot(any(ParkingType.class))).thenReturn(0);
         try {
@@ -85,38 +84,31 @@ public class ParkingServiceTest {
             parkingService.getNextParkingNumberIfAvailable();
         } catch (IndexOutOfBoundsException e) {
             Assertions.assertThat(e)
-                    .isInstanceOf(IndexOutOfBoundsException.class);
-            //.hasMessage("Empty value is passed.");
+                    .isInstanceOf(IndexOutOfBoundsException.class)
+                    .hasMessage("Error fetching parking number from DB. Parking slots might be full");
         }
     }
 
 
-
-
-
-
-
-    /*@Test
-    public void ProcessIncomingVehicle() throws Exception {
-        when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
-        parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
-        parkingService.processIncomingVehicle();
-
-    }*/
-
     @Test
-    public void processExitingVehicleWith24HStay(){
+    public void processExitingVehicle_WithMoreThan24HStay(){
         when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
         when(ticketDAO.getTicket(anyString())).thenReturn(ticket);
         when(ticketDAO.updateTicket(any(Ticket.class))).thenReturn(true);
         when(parkingSpotDAO.updateParking(any(ParkingSpot.class))).thenReturn(true);
         parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
-        parkingService.processExitingVehicleWith24HStay();
-        Assertions.assertThat((ticket.getOutTime().getTime()) - (ticket.getInTime().getTime())).isEqualTo(24 * 60 * 60 * 1000);
+        /*Date outTime = new Date();
+        outTime.setTime(ticket.getInTime().getTime() + (25 * 60 * 60 * 1000));
+        ticket.setOutTime(outTime);
+        parkingService.processExitingVehicle();*/
+        parkingService.processExitingVehicleWith25HStay();
+        double duration = (ticket.getOutTime().getTime()) - (ticket.getInTime().getTime());
+        Assertions.assertThat(duration).isEqualTo(25 * 60 * 60 * 1000);
+        Assertions.assertThat(ticket.getPrice()).isEqualTo(25 * 1.5);
     }
 
     @Test
-    public void processIncomingVehicle(){
+    public void When_processIncomingVehicle_thenATicketIsSaved(){
         when(inputReaderUtil.readSelection()).thenReturn(1);
         when(parkingSpotDAO.getNextAvailableSlot(any(ParkingType.class))).thenReturn(1);
         parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
@@ -126,7 +118,7 @@ public class ParkingServiceTest {
     }
 
     @Test
-    public void ErrorProcessIncomingVehicle(){
+    public void When_processIncomingVehicle_andParkingIsFull_ThenGetError(){
         when(inputReaderUtil.readSelection()).thenReturn(1);
         when(parkingSpotDAO.getNextAvailableSlot(any(ParkingType.class))).thenReturn(0);
         parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
@@ -134,15 +126,13 @@ public class ParkingServiceTest {
             parkingService.processIncomingVehicle();
         } catch (Exception e) {
             Assertions.assertThat(e)
-                    .isInstanceOf(Exception.class)
+                    .isInstanceOf(IndexOutOfBoundsException.class)
                     .hasMessage("Unable to process incoming vehicle");
         }
-
-
     }
 
     @Test
-    public void processExitingVehicleTest() throws Exception {
+    public void When_processExitingVehicleTest_Then_ParkingIsUpdated(){
         when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
         when(ticketDAO.getTicket(anyString())).thenReturn(ticket);
         when(ticketDAO.updateTicket(any(Ticket.class))).thenReturn(true);
@@ -160,14 +150,14 @@ public class ParkingServiceTest {
     }
 
     @Test
-    public void VehicleTypeCarFunctional() throws Exception {
+    public void getVehicleType_ReturnsAVehicleType(){
         when(inputReaderUtil.readSelection()).thenReturn(1);
         parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         assertEquals(parkingService.getVehicleType(), CAR);
     }
 
     @Test
-    public void VehicleTypeBikeFunctional() throws Exception {
+    public void getVehicleType_ReturnsABikeType(){
         when(inputReaderUtil.readSelection()).thenReturn(2);
         parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         assertEquals(parkingService.getVehicleType(), BIKE);

@@ -97,7 +97,7 @@ public class ParkingService {
                 return ParkingType.BIKE;
             }
             default: {
-                System.out.println("Incorrect input provided");
+                System.out.println("Entered input is invalid");
                 throw new IllegalArgumentException("Entered input is invalid");
             }
         }
@@ -127,12 +127,12 @@ public class ParkingService {
         }
     }
 
-    public void processExitingVehicleWith24HStay() {
+    public void processExitingVehicleWith25HStay() {
         try {
             String vehicleRegNumber = getVehicleRegNumber();
             Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);
             Date outTime = new Date();
-            outTime.setTime(ticket.getInTime().getTime() + (24 * 60 * 60 * 1000));
+            outTime.setTime(ticket.getInTime().getTime() + (25 * 60 * 60 * 1000));
             ticket.setOutTime(outTime);
             if (isRecurring == 1) {
                 ticket.setIsRecurring(true);

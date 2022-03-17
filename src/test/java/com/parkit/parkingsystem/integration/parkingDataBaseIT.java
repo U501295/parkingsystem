@@ -15,9 +15,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.io.IOException;
-import java.sql.SQLException;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
@@ -109,7 +106,7 @@ public class parkingDataBaseIT {
          * On utilise une fonction qui renvoie un OutTime 24h plus tard que le inTime, la valeur aurait pu être
          * n'importe laquelle tant qu'elle était supérieure à 30 min
          */
-        parkingService.processExitingVehicleWith24HStay();
+        parkingService.processExitingVehicleWith25HStay();
         assertThat(ticketDAO.getTicket("ABCDEF").getOutTime()).isNotNull();
         long inTimeTest = ticketDAO.getTicket("ABCDEF").getInTime().getTime();
         long outTimeTest = ticketDAO.getTicket("ABCDEF").getOutTime().getTime();
