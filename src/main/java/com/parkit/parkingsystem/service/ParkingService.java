@@ -109,7 +109,7 @@ public class ParkingService {
             String vehicleRegNumber = getVehicleRegNumber();
             Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);
             Date outTime = new Date();
-            if (test == "SIMULATION PLUS DE 24H") {
+            if (test.equals("SIMULATION PLUS DE 24H") ) {
                 outTime.setTime(ticket.getInTime().getTime() + (25 * 60 * 60 * 1000));
                 ticket.setOutTime(outTime);
             }

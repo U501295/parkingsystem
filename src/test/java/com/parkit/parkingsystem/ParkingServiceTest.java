@@ -21,6 +21,7 @@ import java.util.Date;
 import static com.parkit.parkingsystem.constants.ParkingType.BIKE;
 import static com.parkit.parkingsystem.constants.ParkingType.CAR;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -129,7 +130,7 @@ public class ParkingServiceTest {
     }
 
     @Test
-    public void when_processExitingVehicleTest_then_parkingIsUpdated(){
+    public void when_processExitingVehicle_then_parkingIsUpdated(){
         when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
         when(ticketDAO.getTicket(anyString())).thenReturn(ticket);
         when(ticketDAO.updateTicket(any(Ticket.class))).thenReturn(true);
@@ -137,6 +138,38 @@ public class ParkingServiceTest {
         parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         parkingService.processExitingVehicle();
         verify(parkingSpotDAO, Mockito.times(1)).updateParking(any(ParkingSpot.class));
+    }
+    @Test
+    public void when_processExitingVehicleString_then_parkingIsUpdated(){
+        when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
+        when(ticketDAO.getTicket(anyString())).thenReturn(ticket);
+        when(ticketDAO.updateTicket(any(Ticket.class))).thenReturn(true);
+        when(parkingSpotDAO.updateParking(any(ParkingSpot.class))).thenReturn(true);
+        parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+        parkingService.processExitingVehicle("SIMULATION PLUS DE 24H");
+        verify(parkingSpotDAO, Mockito.times(1)).updateParking(any(ParkingSpot.class));
+    }
+
+    @Test
+    public void when_processExitingVehicleStringOtherThanExpected_thenGetNullError(){
+        when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
+        when(ticketDAO.getTicket(anyString())).thenReturn(ticket);
+        //when(ticketDAO.updateTicket(any(Ticket.class))).thenReturn(false);
+        //when(parkingSpotDAO.updateParking(any(ParkingSpot.class))).thenReturn(true);
+        parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+
+        try{
+            parkingService.processExitingVehicle("NON EXPECTED");
+        }catch(Exception e){
+            Assertions.assertThat(e)
+                    .isInstanceOf(NullPointerException.class)
+                    .hasMessage("Unable to process exiting vehicle");
+        }
+
+
+
+
+
     }
 
     @Test

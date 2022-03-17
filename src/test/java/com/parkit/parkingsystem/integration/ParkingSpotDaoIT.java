@@ -50,7 +50,7 @@ public class ParkingSpotDaoIT {
             ticket.setPrice(2.0);
             ticket.setInTime(new Date(System.currentTimeMillis()));
             ticket.setOutTime(new Date(System.currentTimeMillis() + (24 * 60 * 60 * 1000)));
-            //dataBasePrepareService.clearDataBaseEntries();
+            dataBasePrepareService.clearDataBaseEntries();
 
         } catch (Exception e) {
             e.printStackTrace();
