@@ -15,7 +15,7 @@ import java.sql.SQLException;
 
 /**
  * @author : JULIEN BARONI
- * @version : 1.0
+ * @version : 2.0
  * <p>
  * Cette classe permet de faire le lien entre la base de donnée et la gestion du parking.
  * <p>

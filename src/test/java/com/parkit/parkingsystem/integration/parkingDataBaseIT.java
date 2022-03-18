@@ -108,7 +108,7 @@ public class parkingDataBaseIT {
          * On utilise une fonction qui renvoie un OutTime 24h plus tard que le inTime, la valeur aurait pu être
          * n'importe laquelle tant qu'elle était supérieure à 30 min
          */
-        parkingService.processExitingVehicle("SIMULATION PLUS DE 24H");
+        parkingService.processExitingVehicle(25);
         assertThat(ticketDAO.getTicket("ABCDEF").getOutTime()).isNotNull();
         long inTimeTest = ticketDAO.getTicket("ABCDEF").getInTime().getTime();
         long outTimeTest = ticketDAO.getTicket("ABCDEF").getOutTime().getTime();

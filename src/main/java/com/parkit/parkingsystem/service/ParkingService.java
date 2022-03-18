@@ -61,7 +61,7 @@ public class ParkingService {
         }
     }
 
-    public String getVehicleRegNumber() throws Exception {
+    public String getVehicleRegNumber(){
         System.out.println("Please type the vehicle registration number and press enter key");
         return inputReaderUtil.readVehicleRegistrationNumber();
     }
@@ -104,15 +104,14 @@ public class ParkingService {
         }
     }
 
-    public void processExitingVehicle(String test) {
+    public void processExitingVehicle(int test) {
         try {
             String vehicleRegNumber = getVehicleRegNumber();
             Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);
             Date outTime = new Date();
-            if (test.equals("SIMULATION PLUS DE 24H") ) {
-                outTime.setTime(ticket.getInTime().getTime() + (25 * 60 * 60 * 1000));
-                ticket.setOutTime(outTime);
-            }
+            outTime.setTime(ticket.getInTime().getTime() + (test * 60L * 60 * 1000));
+            ticket.setOutTime(outTime);
+
             if (isRecurring == 1) {
                 ticket.setIsRecurring(true);
             }
@@ -128,7 +127,6 @@ public class ParkingService {
             }
         } catch (Exception e) {
             logger.error("Unable to process exiting vehicle", e);
-
         }
     }
 

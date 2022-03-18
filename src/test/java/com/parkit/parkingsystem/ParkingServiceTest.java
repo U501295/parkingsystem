@@ -146,30 +146,8 @@ public class ParkingServiceTest {
         when(ticketDAO.updateTicket(any(Ticket.class))).thenReturn(true);
         when(parkingSpotDAO.updateParking(any(ParkingSpot.class))).thenReturn(true);
         parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
-        parkingService.processExitingVehicle("SIMULATION PLUS DE 24H");
+        parkingService.processExitingVehicle(25);
         verify(parkingSpotDAO, Mockito.times(1)).updateParking(any(ParkingSpot.class));
-    }
-
-    @Test
-    public void when_processExitingVehicleStringOtherThanExpected_thenGetNullError(){
-        when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
-        when(ticketDAO.getTicket(anyString())).thenReturn(ticket);
-        //when(ticketDAO.updateTicket(any(Ticket.class))).thenReturn(false);
-        //when(parkingSpotDAO.updateParking(any(ParkingSpot.class))).thenReturn(true);
-        parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
-
-        try{
-            parkingService.processExitingVehicle("NON EXPECTED");
-        }catch(Exception e){
-            Assertions.assertThat(e)
-                    .isInstanceOf(NullPointerException.class)
-                    .hasMessage("Unable to process exiting vehicle");
-        }
-
-
-
-
-
     }
 
     @Test
