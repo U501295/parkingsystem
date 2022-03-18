@@ -13,7 +13,7 @@ import static java.lang.Class.forName;
 
 /**
  * @author : JULIEN BARONI
- * @version : 1.0
+ * @version : 2.0
  * <p>
  * Cette classe permet d'initialiser la base de donnée utilisée pour les tests, et de lancer la connection avec l'aide
  * de l'api JDBC.

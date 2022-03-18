@@ -104,6 +104,10 @@ public class ParkingService {
         }
     }
 
+    /**
+     * Cette fonction avec un paramètre int permet de simuler un temps d'attente dans le parking avant de sortir
+     * @param test
+     */
     public void processExitingVehicle(int test) {
         try {
             String vehicleRegNumber = getVehicleRegNumber();

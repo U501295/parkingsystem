@@ -6,7 +6,7 @@ import org.apache.logging.log4j.Logger;
 
 /**
  * @author : JULIEN BARONI
- * @VERSION : 1.0
+ * @VERSION : 2.0
  * <p>
  * Cette application est un système de paiement de parking
  * automatisé appelé Park’it.
