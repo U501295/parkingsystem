@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="54180ceb-cc97-4327-8d40-b612c450b85c" name="Changes" comment="fix : gestion des conflits sur le merging avec chore/clean code" />
+    <list default="true" id="54180ceb-cc97-4327-8d40-b612c450b85c" name="Changes" comment="chore : Version 2.0" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -345,7 +345,8 @@
     <MESSAGE value="test : ajout des tests d'intégrations pour la fonctionnalité de reduction" />
     <MESSAGE value="test : ajout des tests unitaires pour les DAOs" />
     <MESSAGE value="test : ajout des tests unitaires pour les ParkingSpotDAO" />
-    <option name="LAST_COMMIT_MESSAGE" value="test : ajout des tests unitaires pour les ParkingSpotDAO" />
+    <MESSAGE value="chore : Version 2.0" />
+    <option name="LAST_COMMIT_MESSAGE" value="chore : Version 2.0" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Projet_4$App.ic" NAME="App Coverage Results" MODIFIED="1646903554804" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
