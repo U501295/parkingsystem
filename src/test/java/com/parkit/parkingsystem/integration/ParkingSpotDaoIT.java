@@ -50,7 +50,7 @@ public class ParkingSpotDaoIT {
             ticket.setPrice(2.0);
             ticket.setInTime(new Date(System.currentTimeMillis()));
             ticket.setOutTime(new Date(System.currentTimeMillis() + (24 * 60 * 60 * 1000)));
-            //dataBasePrepareService.clearDataBaseEntries();
+            dataBasePrepareService.clearDataBaseEntries();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -59,13 +59,13 @@ public class ParkingSpotDaoIT {
     }
 
     @Test
-    public void WhenACarIsComing_AndTheParkingIsEmpty_ThenTheFirstSportISAvailable(){
+    public void whenACarIsComing_andTheParkingIsEmpty_thenTheFirstSportISAvailable(){
         assertEquals(parkingSpotDAO.getNextAvailableSlot(ticket.getParkingSpot().getParkingType()), 1);
 
     }
 
     @Test
-    public void WhenACarIsComing_AndTheParkingIsEmptyWithMoreThanOneAvailableSpot_ThenTheNextSpotBecomesAvailable(){
+    public void whenACarIsComing_andTheParkingIsEmptyWithMoreThanOneAvailableSpot_thenTheNextSpotBecomesAvailable(){
         assertTrue(parkingSpotDAO.updateParking(ticket.getParkingSpot()));
 
     }

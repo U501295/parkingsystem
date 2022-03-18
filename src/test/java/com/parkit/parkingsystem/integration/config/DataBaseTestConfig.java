@@ -13,7 +13,7 @@ import static java.lang.Class.forName;
 
 /**
  * @author : JULIEN BARONI
- * @version : 1.0
+ * @version : 2.0
  * <p>
  * Cette classe permet d'initialiser la base de donnée utilisée pour les tests, et de lancer la connection avec l'aide
  * de l'api JDBC.
@@ -28,14 +28,14 @@ public class DataBaseTestConfig extends DataBaseConfig {
     public Connection getConnection() throws ClassNotFoundException, SQLException {
         logger.info("Create DB connection");
         Properties props = new Properties();
-        try{
-            FileInputStream fis = new FileInputStream("conf.properties");
+        try(FileInputStream fis = new FileInputStream("conf.properties")){
             props.load(fis);
         }catch (IOException e)
         {
-
+            logger.error("Error while fetching file", e);
         }
-        forName(props.getProperty("jdbc.driver.class"));
+
+        Class.forName(props.getProperty("jdbc.driver.class"));
         return DriverManager.getConnection(
                 props.getProperty("jdbc.url.test"),
                 props.getProperty("jdbc.login"),

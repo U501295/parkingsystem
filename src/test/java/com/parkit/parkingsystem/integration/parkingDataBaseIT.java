@@ -15,8 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.io.IOException;
-import java.sql.SQLException;
+import java.util.Date;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -24,7 +23,7 @@ import static org.mockito.Mockito.when;
 
 /**
  * @author : JULIEN BARONI
- * @version : 1.0
+ * @version : 2.0
  * <p>
  * Cette classe permet de tester les échanges entre un utilisateur et la base de donnée
  * <p>
@@ -62,14 +61,14 @@ public class parkingDataBaseIT {
     }
 
     @BeforeEach
-    private void setUpPerTest() throws Exception {
+    private void setUpPerTest(){
         when(inputReaderUtil.readSelection()).thenReturn(1);
         when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
         dataBasePrepareService.clearDataBaseEntries();
     }
 
     @Test
-    public void WhenACarIsComing_ThenTheDataBaseResponds(){
+    public void whenACarIsComing_thenTheDataBaseResponds(){
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         parkingService.processIncomingVehicle();
         assertThat(ticketDAO.getTicket("ABCDEF")).isNotNull();
@@ -77,15 +76,15 @@ public class parkingDataBaseIT {
     }
 
     @Test
-    public void WhenACarIsLeaving_ThenTheDataBaseResponds(){
-        WhenACarIsComing_ThenTheDataBaseResponds();
+    public void whenACarIsLeaving_thenTheDataBaseResponds(){
+        whenACarIsComing_thenTheDataBaseResponds();
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         parkingService.processExitingVehicle();
         assertThat(ticketDAO.getTicket("ABCDEF").getOutTime()).isNotNull();
     }
 
     @Test
-    public void WhenACarIsComingBack_ThenItIsFlaggedAsRecurring(){
+    public void whenACarIsComingBack_thenItIsFlaggedAsRecurring(){
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         //On simule le premier aller retour d'une voiture
         parkingService.processIncomingVehicle();
@@ -97,7 +96,7 @@ public class parkingDataBaseIT {
 
 
     @Test
-    public void WhenARecurringCarIsLeaving_ThenThePriceReductionIsApplied(){
+    public void whenARecurringCarIsLeaving_thenThePriceReductionIsApplied(){
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         parkingService.processIncomingVehicle();
         parkingService.processExitingVehicle();
@@ -109,13 +108,13 @@ public class parkingDataBaseIT {
          * On utilise une fonction qui renvoie un OutTime 24h plus tard que le inTime, la valeur aurait pu être
          * n'importe laquelle tant qu'elle était supérieure à 30 min
          */
-        parkingService.processExitingVehicleWith24HStay();
+        parkingService.processExitingVehicle(25);
         assertThat(ticketDAO.getTicket("ABCDEF").getOutTime()).isNotNull();
         long inTimeTest = ticketDAO.getTicket("ABCDEF").getInTime().getTime();
         long outTimeTest = ticketDAO.getTicket("ABCDEF").getOutTime().getTime();
         int sec_in_millisec = 1000, min_in_sec = 60, hours_in_min = 60;
         double timeOfStay = (outTimeTest - inTimeTest) / (sec_in_millisec * min_in_sec * hours_in_min);
-        double expectedResult = (timeOfStay * Fare.CAR_RATE_PER_HOUR) - (0.05 * (timeOfStay * Fare.CAR_RATE_PER_HOUR));
+        double expectedResult = (0.95*(timeOfStay * Fare.CAR_RATE_PER_HOUR));
         assertEquals(expectedResult, ticketDAO.getTicket("ABCDEF").getPrice());
     }
 

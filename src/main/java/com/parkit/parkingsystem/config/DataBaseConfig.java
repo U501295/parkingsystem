@@ -11,7 +11,7 @@ import java.util.Properties;
 
 /**
  * @author : JULIEN BARONI
- * @version : 1.0
+ * @version : 2.0
  * @inheritedDoc DataBaseTestConfig
  * Cette classe permet d'initialiser la base de donnée utilisée pour la production, et de lancer la connection avec l'aide
  * de l'api JDBC.
@@ -22,7 +22,7 @@ public class DataBaseConfig {
 
     private static final Logger logger = LogManager.getLogger("DataBaseConfig");
 
-    public Connection getConnection() throws ClassNotFoundException, SQLException, IOException {
+    public Connection getConnection() throws ClassNotFoundException, SQLException{
         logger.info("Create DB connection");
         Properties props = new Properties();
         try(FileInputStream fis = new FileInputStream("conf.properties")){
@@ -50,6 +50,11 @@ public class DataBaseConfig {
         }
     }
 
+    /**
+     * Un prepared statement correspond au wrapping d'une instruction SQL dans du code JAVA,
+     * dont on se sert pour exploiter la base de donnée depuis le script.
+
+     */
     public void closePreparedStatement(PreparedStatement ps) {
         if (ps != null) {
             try {
@@ -60,7 +65,12 @@ public class DataBaseConfig {
             }
         }
     }
-
+    /**
+     * Un ResultSet correspond au retour d'une requête vers une base de donnée.
+     * On se sert d'un result set pour enrichir notre script grâce aux output de la base
+     * en réponse à nos requêtes.
+     *
+     */
     public void closeResultSet(ResultSet rs) {
         if (rs != null) {
             try {

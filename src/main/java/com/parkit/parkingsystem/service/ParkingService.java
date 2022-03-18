@@ -28,6 +28,7 @@ public class ParkingService {
         this.ticketDAO = ticketDAO;
     }
 
+
     public void processIncomingVehicle() {
         try {
             ParkingSpot parkingSpot = getNextParkingNumberIfAvailable();
@@ -60,7 +61,7 @@ public class ParkingService {
         }
     }
 
-    public String getVehicleRegNumber() throws Exception {
+    public String getVehicleRegNumber(){
         System.out.println("Please type the vehicle registration number and press enter key");
         return inputReaderUtil.readVehicleRegistrationNumber();
     }
@@ -97,18 +98,24 @@ public class ParkingService {
                 return ParkingType.BIKE;
             }
             default: {
-                System.out.println("Incorrect input provided");
+                System.out.println("Entered input is invalid");
                 throw new IllegalArgumentException("Entered input is invalid");
             }
         }
     }
 
-    public void processExitingVehicle() {
+    /**
+     * Cette fonction avec un paramètre int permet de simuler un temps d'attente dans le parking avant de sortir
+     * @param test
+     */
+    public void processExitingVehicle(int test) {
         try {
             String vehicleRegNumber = getVehicleRegNumber();
             Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);
             Date outTime = new Date();
+            outTime.setTime(ticket.getInTime().getTime() + (test * 60L * 60 * 1000));
             ticket.setOutTime(outTime);
+
             if (isRecurring == 1) {
                 ticket.setIsRecurring(true);
             }
@@ -127,12 +134,11 @@ public class ParkingService {
         }
     }
 
-    public void processExitingVehicleWith24HStay() {
+    public void processExitingVehicle() {
         try {
             String vehicleRegNumber = getVehicleRegNumber();
             Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);
             Date outTime = new Date();
-            outTime.setTime(ticket.getInTime().getTime() + (24 * 60 * 60 * 1000));
             ticket.setOutTime(outTime);
             if (isRecurring == 1) {
                 ticket.setIsRecurring(true);

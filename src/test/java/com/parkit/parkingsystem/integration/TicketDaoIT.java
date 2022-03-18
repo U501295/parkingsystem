@@ -53,7 +53,7 @@ public class TicketDaoIT {
     }
 
     @Test
-    public void WhenACarIsComing_ThenItsTicketIsSaved(){
+    public void whenACarIsComing_thenItsTicketIsSaved(){
         // il n'est pas possible de mocker la base de donnée étant donné qu'elle est créée directement dans saveTicket
         assertTrue(ticketDAO.saveTicket(ticket));
 
@@ -61,14 +61,14 @@ public class TicketDaoIT {
     }
 
     @Test
-    public void WhenTicketIsNull_ThenItIsNotSaved(){
+    public void whenTicketIsNull_thenItIsNotSaved(){
         // il n'est pas possible de mocker la base de donnée étant donné qu'elle est créée directement dans saveTicket
         assertFalse(ticketDAO.saveTicket(null));
 
     }
 
     @Test
-    public void WhenTicketIsSaved_ThenItIsPossibleToFetchItsData(){
+    public void whenTicketIsSaved_thenItIsPossibleToFetchItsData(){
         // il n'est pas possible de mocker la base de donnée étant donné qu'elle est créée directement dans saveTicket
         ticketDAO.saveTicket(ticket);
         Ticket test = ticketDAO.getTicket(ticket.getVehicleRegNumber());
@@ -79,28 +79,25 @@ public class TicketDaoIT {
 
 
     @Test
-    public void RecurringFalse(){
-        ticket.setVehicleRegNumber("FALSE");
+    public void caseWhen_recurringIsFalse(){
         assertFalse(ticketDAO.isTicketFromRecurrentUser(ticket.getVehicleRegNumber()));
-        ticket.setVehicleRegNumber("TEST");
-
-    }
+        }
 
     @Test
-    public void RecurringTrue(){
+    public void caseWhen_recurringIsTrue(){
         ticketDAO.saveTicket(ticket);
         assertTrue(ticketDAO.isTicketFromRecurrentUser(ticket.getVehicleRegNumber()));
 
     }
 
     @Test
-    public void UpdateTicketTrue(){
+    public void caseWhen_updateTicketIsTrue(){
         assertTrue(ticketDAO.updateTicket(ticket));
 
     }
 
     @Test
-    public void UpdateTicketFalse(){
+    public void caseWhen_updateTicketIsFalse(){
         assertFalse(ticketDAO.updateTicket(null));
 
     }
